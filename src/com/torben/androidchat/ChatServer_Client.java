@@ -59,15 +59,8 @@ public class ChatServer_Client {
 
 		if(!isConnected_) return;
 		
-		switch(connectionType_){
-		case rest:
-			
-			break;
-			
-		case sockets:
-			
-			break;
-		}
+		chatRoom_.disconnect();
+		
 		chatRoom_ = null;
 	}
 
