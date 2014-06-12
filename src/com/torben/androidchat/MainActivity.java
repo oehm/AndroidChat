@@ -29,6 +29,8 @@ public class MainActivity extends Activity {
     
     /* Called when the user clicks the start Client button.*/
     public void startClient(View view){
+    	Intent intent = new Intent(this, ClientConfigure.class);
+    	startActivity(intent);
     }
 
 }

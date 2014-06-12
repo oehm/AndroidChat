@@ -18,7 +18,7 @@ public class ChatServer_Client {
 	public enum ConnectionType {sockets, rest};
 	private ConnectionType connectionType_ = ConnectionType.sockets;
 	
-	private boolean isConnected_;
+	private boolean isConnected_ = false;
 	
 	private String host_;
 	private int port_;
@@ -40,8 +40,13 @@ public class ChatServer_Client {
 		
 		switch(connectionType_){
 		case rest:
-			chatRoom_ = new ChatRoom_Rest();
-			isConnected_ = true;
+			try {
+				chatRoom_ = new ChatRoom_Rest(host);
+				isConnected_ = true;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			break;
 			
 		case sockets:
@@ -64,17 +69,16 @@ public class ChatServer_Client {
 		// TODO Auto-generated method stub
 
 		if(!isConnected_) return;
-		
-		switch(connectionType_){
-		case rest:
+
+		try {
+			chatRoom_.disconnect();
+			chatRoom_ = null;
 			isConnected_ = false;
-			break;
 			
-		case sockets:
-			isConnected_ = false;
-			break;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		chatRoom_ = null;
 	}
 
 	public ChatRoom getChatRoom() {

@@ -43,6 +43,14 @@ public class Client_Thread_Socket implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		try {
+			socket_.close();
+			output_.close();
+			input_.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void parseInput(String input){

@@ -46,15 +46,20 @@ public class ClientConfigure extends Activity {
 		if(on){
 			if(ChatServer_Client.Instance().isConnected()) return;
 			Log.v("Client:","connecting");
+			
 			String host = editHost_.getText().toString();
 			int port = Integer.parseInt(editPort_.getText().toString());
-			
 			ChatServer_Client.Instance().connect(host, port);
+			
+			toggleConnection_.setChecked(ChatServer_Client.Instance().isConnected());
 		}
 		else {
 			if(!ChatServer_Client.Instance().isConnected()) return;
 			Log.v("Client:","disconnecting");
+			
 			ChatServer_Client.Instance().disconnect();
+			
+			toggleConnection_.setChecked(ChatServer_Client.Instance().isConnected());
 		}
 	}
 }

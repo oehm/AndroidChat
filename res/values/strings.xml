@@ -6,8 +6,8 @@
     
     <string name="title_activity_client_configure">ClientConfigure</string>
     <string name="button_start_client">Configure Client</string>
-    <string name="toggle_client_turn_on">Connect</string>
-    <string name="toggle_client_turn_off">Disconnect</string>
+    <string name="toggle_client_turn_on">Disconnect</string>
+    <string name="toggle_client_turn_off">Connect</string>
     
     <string name="title_activity_host_configure">HostConfigure</string>
     <string name="button_start_host">Configure Host</string>
