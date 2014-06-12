@@ -28,44 +28,50 @@ public class ChatServer_Client {
 	public void setConnectionType(ConnectionType type)
 	{
 		if(connectionType_ == type) return;
-		try {
-			disconnect();
-			connectionType_ = type;
-			connect(host_, port_);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		disconnect();
+		connectionType_ = type;
+		connect(host_, port_);
 	}
 	
-	public void connect(String host, int port) throws IOException, UnknownHostException{
+	public void connect(String host, int port){
 		// TODO Auto-generated method stub
 		if(isConnected_) return;
 		
 		switch(connectionType_){
 		case rest:
 			chatRoom_ = new ChatRoom_Rest();
+			isConnected_ = true;
 			break;
 			
 		case sockets:
-			chatRoom_ = new ChatRoom_Sockets(host,port);
+			try {
+				chatRoom_ = new ChatRoom_Sockets(host,port);
+				isConnected_ = true;
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 
 	}
 
-	public void disconnect() throws IOException {
+	public void disconnect(){
 		// TODO Auto-generated method stub
 
 		if(!isConnected_) return;
 		
 		switch(connectionType_){
 		case rest:
-			
+			isConnected_ = false;
 			break;
 			
 		case sockets:
-			
+			isConnected_ = false;
 			break;
 		}
 		chatRoom_ = null;
@@ -76,4 +82,7 @@ public class ChatServer_Client {
 		return chatRoom_;
 	}
 
+	public boolean isConnected(){
+		return isConnected_;
+	}
 }

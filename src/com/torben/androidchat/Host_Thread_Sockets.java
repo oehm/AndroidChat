@@ -31,6 +31,11 @@ public class Host_Thread_Sockets  implements Runnable{
 		while (!Thread.currentThread().isInterrupted())
 		{
 			Log.v("Host:","Sockets: waiting for connection");
+			for(Thread t : clientThreads_){
+				if(t.isInterrupted()){
+					clientThreads_.remove(t);
+				}
+			}
 			Socket client = null;
 			try {
 				client = serverSocket_.accept();
