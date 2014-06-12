@@ -10,7 +10,7 @@ import android.widget.ToggleButton;
 
 public class HostConfigure extends Activity {
 
-	private ToggleButton toggleHost;
+	private ToggleButton toggleSockets_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,16 @@ public class HostConfigure extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		//my stuff
-		addListenerOnButton();
+		//sockets:
+		toggleSockets_ = (ToggleButton) findViewById(R.id.toggle_host);
+		toggleSockets_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    @Override
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        // Save the state here
+		    	Host.Instance().setSocketsState(isChecked);
+		    }
+		});
+		toggleSockets_.setChecked(Host.Instance().getSocketState());
 	}
 
 	/**
@@ -55,16 +63,4 @@ public class HostConfigure extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public void addListenerOnButton() {
-		 
-		toggleHost = (ToggleButton) findViewById(R.id.toggle_host);
-		toggleHost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-		    @Override
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		        // Save the state here
-		    }
-		});
-	 
-	  }
 }

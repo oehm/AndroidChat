@@ -24,14 +24,12 @@ public class MainActivity extends Activity {
 	
 	/* Called when the user clicks the start Host button.*/
     public void startHost(View view){
-    	Log.v("Button:","host");
     	Intent intent = new Intent(this, HostConfigure.class);
     	startActivity(intent);
     }
     
     /* Called when the user clicks the start Client button.*/
     public void startClient(View view){
-    	Log.v("Button:","client");
     }
 
 }

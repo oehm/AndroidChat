@@ -3,20 +3,26 @@ package com.torben.androidchat;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
+
+import android.util.Log;
 
 public class Host_Thread_Sockets  implements Runnable{
 	
 	private int port_;
 	private ServerSocket serverSocket_;
 	
-	private List<Socket> clients_;
+	private List<Thread> clientThreads_;
 
 	@Override
 	public void run()
-	{		
+	{
+		clientThreads_ = new ArrayList<Thread>();
+				
 		try {
 			serverSocket_ = new ServerSocket(port_);
+			serverSocket_.setSoTimeout(2000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -24,45 +30,34 @@ public class Host_Thread_Sockets  implements Runnable{
 	
 		while (!Thread.currentThread().isInterrupted())
 		{
+			Log.v("Host:","Sockets: waiting for connection");
 			Socket client = null;
 			try {
 				client = serverSocket_.accept();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			if(client != null)
 			{
-				clients_.add(client);
+				Thread thread = new Thread(new Client_Thread_Socket(client));
+				
+				clientThreads_.add(thread);
 			}
 		}
-	}
-	
-}
-	
-	/*
-class ServerThread implements Runnable {
-
-	public void run() {
-		Socket socket = null;
+		
 		try {
-			serverSocket = new ServerSocket(SERVERPORT);
+			serverSocket_.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		while (!Thread.currentThread().isInterrupted()) {
-
-			try {
-
-				socket = serverSocket.accept();
-
-				CommunicationThread commThread = new CommunicationThread(socket);
-				new Thread(commThread).start();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		
+		for(Thread t : clientThreads_){
+			t.interrupt();
 		}
+
+		Log.v("Host:","Sockets: closed all connections");
 	}
+	
 }
-*/
