@@ -89,7 +89,7 @@ public class ChatRoom_Sockets implements ChatRoom {
 	@Override
 	public boolean sendMessage(String message) throws IOException {
 		// TODO Auto-generated method stub
-		String msg = "action=";
+		String msg = "message="+message;
 		output_.write(msg);
 		output_.newLine();
 		output_.flush();
@@ -99,6 +99,11 @@ public class ChatRoom_Sockets implements ChatRoom {
 	@Override
 	public String getMessages() throws IOException {
 		// TODO Auto-generated method stub
+		String msg = "action=";
+		output_.write(msg);
+		output_.newLine();
+		output_.flush();
+		
 		String messages = null;
 		while(messages == null)
 		{
@@ -107,4 +112,11 @@ public class ChatRoom_Sockets implements ChatRoom {
 		return messages;
 	}
 
+	@Override
+	public void disconnect() throws IOException
+	{
+		output_.close();
+		input_.close();
+		socket_.close();
+	}
 }

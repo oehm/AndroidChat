@@ -51,6 +51,11 @@ public class ChatRoom_Rest implements ChatRoom {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public void disconnect() throws IOException
+	{
+		
+	}
 
 }

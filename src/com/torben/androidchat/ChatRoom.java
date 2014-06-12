@@ -17,9 +17,10 @@ public interface ChatRoom {
 	public boolean joinTopic(String topic) throws IOException;
 	// Remove a topic from the chat room.
 	public boolean leaveTopic(String topic) throws IOException;
-	
 	// Sends a message to the chat room.
 	public boolean sendMessage(String message) throws IOException;
 	// Get last ten messages from the chat room.
 	public String getMessages() throws IOException;
+	
+	public void disconnect() throws IOException;
 }
