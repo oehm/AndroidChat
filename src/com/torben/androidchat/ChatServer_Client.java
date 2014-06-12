@@ -44,7 +44,7 @@ public class ChatServer_Client {
 		
 		switch(connectionType_){
 		case rest:
-			chatRoom_ = new ChatRoom_Rest();
+			chatRoom_ = new ChatRoom_Rest(host);
 			break;
 			
 		case sockets:
@@ -59,8 +59,7 @@ public class ChatServer_Client {
 
 		if(!isConnected_) return;
 		
-		chatRoom_.disconnect();
-		
+		chatRoom_.disconnect();		
 		chatRoom_ = null;
 	}
 
