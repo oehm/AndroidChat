@@ -22,8 +22,6 @@ public class Client_ChatRoom_Rest extends AsyncTask<String, Void, Void>  impleme
     
     JSONObject jsonOut = null;
     JSONObject jsonIn = null;
-
-    private boolean connected_ = false;
 	
 	public Client_ChatRoom_Rest(String host) throws IOException
 	{
@@ -158,11 +156,6 @@ public class Client_ChatRoom_Rest extends AsyncTask<String, Void, Void>  impleme
 	public void connect() throws IOException {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public boolean isConnected() {
-		return connected_;
 	}
 
 }

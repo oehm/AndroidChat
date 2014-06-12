@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class Host_ThreadMain_Sockets  implements Runnable{
 	
-	private int port_;
+	private int port_ = 0;
 	private ServerSocket serverSocket_;
 	
 	private List<Thread> clientThreads_;
@@ -22,6 +22,7 @@ public class Host_ThreadMain_Sockets  implements Runnable{
 				
 		try {
 			serverSocket_ = new ServerSocket(port_);
+			Log.v("Host", "Port: "+serverSocket_.getLocalPort());
 			serverSocket_.setSoTimeout(2000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

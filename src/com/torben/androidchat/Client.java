@@ -3,6 +3,8 @@ package com.torben.androidchat;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import android.util.Log;
+
 public class Client {
 	private static Client instance_ = null;
 	
@@ -37,6 +39,7 @@ public class Client {
 			try {
 				chatRoom_ = new Client_ChatRoom_Rest(host);
 				connectionStatus_ = ConnectionStatus.connecting;
+				chatRoom_.connect();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -47,6 +50,7 @@ public class Client {
 			try {
 				chatRoom_ = new Client_ChatRoom_Sockets(host,port);
 				connectionStatus_ = ConnectionStatus.connecting;
+				chatRoom_.connect();
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,6 +76,8 @@ public class Client {
 	}
 	
 	public void finishConnectionState(boolean success){
+		Log.v("Client", "operation success: "+success);
+		
 		if(success){
 			if(connectionStatus_ == ConnectionStatus.connecting) connectionStatus_ = ConnectionStatus.connected;
 			if(connectionStatus_ == ConnectionStatus.disconnecting) connectionStatus_ = ConnectionStatus.disconnected;

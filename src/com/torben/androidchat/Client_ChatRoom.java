@@ -24,5 +24,4 @@ public interface Client_ChatRoom {
 	
 	public void disconnect() throws IOException;
 	public void connect() throws IOException;
-	public boolean isConnected();
 }

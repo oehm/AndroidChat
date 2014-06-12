@@ -18,8 +18,6 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	private String host_;
 	private int port_;
 	
-	private boolean connected_;
-	
 	public Client_ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
 			host_ = host;
 			port_ = port;
@@ -131,8 +129,9 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	{
 		try {
 			socket_.close();
-			connected_ = false;
+			Client.Instance().finishConnectionState(true);
 		} catch (IOException e) {
+			Client.Instance().finishConnectionState(false);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -146,26 +145,27 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 			@Override
 		    public void run()
 		    {
-		        try {
-					threadConnect();
-					connected_ = true;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				threadConnect();
 		    }
 		}.start();
 	}
 	
-	private void threadConnect() throws IOException
+	private void threadConnect()
 	{
-		socket_ = new Socket(host_, port_);
-		input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
-		output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
-	}
+		try {
+			socket_ = new Socket(host_, port_);
+			input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
+			output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
+			Client.Instance().finishConnectionState(true);
+		} catch (UnknownHostException e) {
+			Client.Instance().finishConnectionState(false);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			Client.Instance().finishConnectionState(false);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	@Override
-	public boolean isConnected() {
-		return connected_;
 	}
 }
