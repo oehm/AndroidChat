@@ -15,16 +15,14 @@ public class ChatRoom_Sockets implements ChatRoom {
 	private BufferedReader input_;
 	private BufferedWriter output_;
 	
+	private String host_;
+	private int port_;
+	
+	private boolean connected_;
+	
 	public ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
-			socket_ = new Socket(host, port);
-			try {
-
-				input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
-				output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			host_ = host;
+			port_ = port;
 	}
 	
 	@Override
@@ -117,6 +115,56 @@ public class ChatRoom_Sockets implements ChatRoom {
 	{
 		output_.close();
 		input_.close();
-		socket_.close();
+		new Thread()
+		{
+			@Override
+		    public void run()
+		    {
+		        threadDissconnect();
+		    }
+		}.start();
+	}
+
+	
+	private void threadDissconnect()
+	{
+		try {
+			socket_.close();
+			connected_ = false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void connect() throws IOException {
+		// TODO Auto-generated method stubs
+		new Thread()
+		{
+			@Override
+		    public void run()
+		    {
+		        try {
+					threadConnect();
+					connected_ = true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		}.start();
+	}
+	
+	private void threadConnect() throws IOException
+	{
+		socket_ = new Socket(host_, port_);
+		input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
+		output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
+	}
+
+	@Override
+	public boolean isConnected() {
+		return connected_;
 	}
 }

@@ -42,6 +42,7 @@ public class ChatServer_Client {
 		case rest:
 			try {
 				chatRoom_ = new ChatRoom_Rest(host);
+				chatRoom_.connect();
 				isConnected_ = true;
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -52,6 +53,7 @@ public class ChatServer_Client {
 		case sockets:
 			try {
 				chatRoom_ = new ChatRoom_Sockets(host,port);
+				chatRoom_.connect();
 				isConnected_ = true;
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block

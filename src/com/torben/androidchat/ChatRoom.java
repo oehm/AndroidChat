@@ -23,4 +23,6 @@ public interface ChatRoom {
 	public String getMessages() throws IOException;
 	
 	public void disconnect() throws IOException;
+	public void connect() throws IOException;
+	public boolean isConnected();
 }
