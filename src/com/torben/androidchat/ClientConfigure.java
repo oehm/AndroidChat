@@ -32,7 +32,7 @@ public class ClientConfigure extends Activity {
 		    	handleConnectionChanged(isChecked);
 		    }
 		});
-		toggleConnection_.setChecked(ChatServer_Client.Instance().isConnected());
+		toggleConnection_.setChecked(Client.Instance().getConnectionState());
 	}
 
 	@Override
@@ -44,22 +44,22 @@ public class ClientConfigure extends Activity {
 	
 	private void handleConnectionChanged(boolean on){
 		if(on){
-			if(ChatServer_Client.Instance().isConnected()) return;
+			if(Client.Instance().getConnectionState()) return;
 			Log.v("Client:","connecting");
 			
 			String host = editHost_.getText().toString();
 			int port = Integer.parseInt(editPort_.getText().toString());
-			ChatServer_Client.Instance().connect(host, port);
+			Client.Instance().connect(host, port);
 			
-			toggleConnection_.setChecked(ChatServer_Client.Instance().isConnected());
+			toggleConnection_.setChecked(Client.Instance().getConnectionState());
 		}
 		else {
-			if(!ChatServer_Client.Instance().isConnected()) return;
+			if(!Client.Instance().getConnectionState()) return;
 			Log.v("Client:","disconnecting");
 			
-			ChatServer_Client.Instance().disconnect();
+			Client.Instance().disconnect();
 			
-			toggleConnection_.setChecked(ChatServer_Client.Instance().isConnected());
+			toggleConnection_.setChecked(Client.Instance().getConnectionState());
 		}
 	}
 }

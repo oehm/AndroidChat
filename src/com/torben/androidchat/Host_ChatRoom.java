@@ -1,15 +1,16 @@
 package com.torben.androidchat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoom_Host {
+public class Host_ChatRoom {
 
-	private static ChatRoom_Host instance_ = null;
+	private static Host_ChatRoom instance_ = null;
 	
-	public static ChatRoom_Host Instance(){
+	public static Host_ChatRoom Instance(){
 		if(instance_ == null){
-			instance_ = new ChatRoom_Host();
+			instance_ = new Host_ChatRoom();
 		}
 		return instance_;
 	}
@@ -94,5 +95,22 @@ public class ChatRoom_Host {
 			}
 		}
 		return null;
+	}
+	
+	public class Topic {
+		private String name_;
+		public List<String> userList;
+		public List<String> messages;
+		
+		public Topic (String n)
+		{
+			name_ = n;
+			userList = new ArrayList<String>();
+			messages = new ArrayList<String>();
+		}
+		
+		public String getName(){
+			return name_;
+		}
 	}
 }

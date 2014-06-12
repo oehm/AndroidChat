@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class Client_Thread_Socket implements Runnable{
+public class Host_ThreadConnection_Sockets implements Runnable{
 
 	private Socket socket_;	
 	private BufferedReader input_;
@@ -16,7 +16,7 @@ public class Client_Thread_Socket implements Runnable{
 	private String topic_;
 	private String name_;
 	
-	public Client_Thread_Socket(Socket socket){
+	public Host_ThreadConnection_Sockets(Socket socket){
 		socket_ = socket;
 		topic_ = null;
 		name_ = null;
@@ -69,7 +69,7 @@ public class Client_Thread_Socket implements Runnable{
 		{
 			String name = input.substring(eqIdx+1); 
 			try {
-				if(ChatRoom_Host.Instance().addParticipant(name,""))
+				if(Host_ChatRoom.Instance().addParticipant(name,""))
 					name_ = name; 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -82,7 +82,7 @@ public class Client_Thread_Socket implements Runnable{
 			
 			String name = input.substring(eqIdx+1);;
 			try {
-				ChatRoom_Host.Instance().removeParticipant(name,"");
+				Host_ChatRoom.Instance().removeParticipant(name,"");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -94,7 +94,7 @@ public class Client_Thread_Socket implements Runnable{
 			
 			String message = input.substring(eqIdx+1);
 			try {
-				ChatRoom_Host.Instance().sendMessage(name_,topic_,message);
+				Host_ChatRoom.Instance().sendMessage(name_,topic_,message);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -104,7 +104,7 @@ public class Client_Thread_Socket implements Runnable{
 		{
 			String topic = input.substring(eqIdx+1);
 			try {
-				ChatRoom_Host.Instance().addTopic(topic);
+				Host_ChatRoom.Instance().addTopic(topic);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,7 +114,7 @@ public class Client_Thread_Socket implements Runnable{
 		{
 			String topic = input.substring(eqIdx+1);
 			try {
-				ChatRoom_Host.Instance().removeTopic(topic);
+				Host_ChatRoom.Instance().removeTopic(topic);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -127,7 +127,7 @@ public class Client_Thread_Socket implements Runnable{
 			String topic =input.substring(eqIdx+1);
 			topic_ = topic;
 			try {
-				ChatRoom_Host.Instance().addParticipant(name_, topic_);
+				Host_ChatRoom.Instance().addParticipant(name_, topic_);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -143,7 +143,7 @@ public class Client_Thread_Socket implements Runnable{
 			if(topic_ == null) return;
 			
 			try {
-				String messages = ChatRoom_Host.Instance().getMessages(topic_);
+				String messages = Host_ChatRoom.Instance().getMessages(topic_);
 				if(messages!= null)
 					output_.write(messages);
 					output_.newLine();

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-public class ChatRoom_Rest extends AsyncTask<String, Void, Void>  implements ChatRoom {
+public class Client_ChatRoom_Rest extends AsyncTask<String, Void, Void>  implements Client_ChatRoom {
 
 	private URL url_;
 	private HttpURLConnection urlConnection_;
@@ -25,7 +25,7 @@ public class ChatRoom_Rest extends AsyncTask<String, Void, Void>  implements Cha
 
     private boolean connected_ = false;
 	
-	public ChatRoom_Rest(String host) throws IOException
+	public Client_ChatRoom_Rest(String host) throws IOException
 	{
 		url_ = new URL(host);
 		urlConnection_ = (HttpURLConnection) url_.openConnection();

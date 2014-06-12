@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ChatRoom_Sockets implements ChatRoom {
+public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	
 	Socket socket_;
 	
@@ -20,9 +20,10 @@ public class ChatRoom_Sockets implements ChatRoom {
 	
 	private boolean connected_;
 	
-	public ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
+	public Client_ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
 			host_ = host;
 			port_ = port;
+
 	}
 	
 	@Override
