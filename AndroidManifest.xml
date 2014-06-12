@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.torben.androidchat.HostConfigure"
+            android:label="@string/title_activity_host_configure"
+            android:parentActivityName="com.torben.androidchat.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.torben.androidchat.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
