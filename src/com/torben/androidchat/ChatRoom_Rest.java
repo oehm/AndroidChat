@@ -73,7 +73,7 @@ public class ChatRoom_Rest extends AsyncTask<String, Void, Void>  implements Cha
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		doInBackground((String[])null);
+		this.execute((String[])null);
 		return false;
 	}
 
