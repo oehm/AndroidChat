@@ -8,14 +8,14 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ChatRoom_Sockets implements ChatRoom {
+public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	
 	Socket socket_;
 	
 	private BufferedReader input_;
 	private BufferedWriter output_;
 	
-	public ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
+	public Client_ChatRoom_Sockets(String host, int port) throws IOException, UnknownHostException {
 			socket_ = new Socket(host, port);
 			try {
 

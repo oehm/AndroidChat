@@ -2,7 +2,7 @@ package com.torben.androidchat;
 
 import java.io.IOException;
 
-public interface ChatRoom {
+public interface Client_ChatRoom {
 	// Add a participant who joined the chat room.
 	public boolean addParticipant (String name) throws IOException;
 	// Remove a participant who left the chat room.

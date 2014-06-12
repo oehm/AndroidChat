@@ -8,7 +8,7 @@ import java.util.List;
 
 import android.util.Log;
 
-public class Host_Thread_Sockets  implements Runnable{
+public class Host_ThreadMain_Sockets  implements Runnable{
 	
 	private int port_;
 	private ServerSocket serverSocket_;
@@ -45,7 +45,7 @@ public class Host_Thread_Sockets  implements Runnable{
 			}
 			if(client != null)
 			{
-				Thread thread = new Thread(new Client_Thread_Socket(client));
+				Thread thread = new Thread(new Host_ThreadConnection_Sockets(client));
 				
 				clientThreads_.add(thread);
 			}

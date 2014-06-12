@@ -23,7 +23,7 @@ public class Host {
 		if(on){
 			if(hostSocketThread_ != null) return;
 			Log.v("Host:","Sockets got turned on");
-			hostSocketThread_ = new Thread(new Host_Thread_Sockets());
+			hostSocketThread_ = new Thread(new Host_ThreadMain_Sockets());
 			hostSocketThread_.start();
 		}
 		else {
