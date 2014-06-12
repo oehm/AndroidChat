@@ -1,6 +1,7 @@
 package com.torben.androidchat;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 
 public class ChatServer_Client {
@@ -37,7 +38,7 @@ public class ChatServer_Client {
 		}
 	}
 	
-	public void connect(String host, int port) throws IOException {
+	public void connect(String host, int port) throws IOException, UnknownHostException{
 		// TODO Auto-generated method stub
 		if(isConnected_) return;
 		
@@ -47,7 +48,7 @@ public class ChatServer_Client {
 			break;
 			
 		case sockets:
-			chatRoom_ = new ChatRoom_Sockets();
+			chatRoom_ = new ChatRoom_Sockets(host,port);
 			break;
 		}
 
