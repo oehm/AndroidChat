@@ -36,7 +36,6 @@ public class Client_Thread_Socket implements Runnable{
 		while (!Thread.currentThread().isInterrupted()) {
 
 			try {
-
 				String read = input_.readLine();
 				parseInput(read);
 

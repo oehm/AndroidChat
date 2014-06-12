@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ToggleButton
+        android:id="@+id/toggle_client_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="@string/toggle_client_turn_on"
+        android:textOff="@string/toggle_client_turn_off" />
+       
+    <EditText
+       android:id="@+id/text_client_host"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:hint="@string/hint_client_host"
+       android:inputType="text" />
+       
+    <EditText
+       android:id="@+id/text_client_port"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:hint="@string/hint_client_port"
+       android:inputType="number" />
+
+    
+
+</LinearLayout>

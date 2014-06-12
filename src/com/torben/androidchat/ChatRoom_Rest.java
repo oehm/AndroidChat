@@ -50,14 +50,24 @@ public class ChatRoom_Rest extends AsyncTask<String, Void, Void>  implements Cha
 		
 		if(read)
 		{
-			StringBuilder input;
+			StringBuilder input = new StringBuilder();
 			String line;
-			 while((line = intput_.readLine()) != null)
-             {
-                    // Append server response in string
-                    input.append(line);
-             }
-			 jsonIn = new JSONObject(input.toString());
+			try {
+				while((line = intput_.readLine()) != null)
+				 {
+			        // Append server response in string
+			        input.append(line);
+				 }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				jsonIn = new JSONObject(input.toString());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
