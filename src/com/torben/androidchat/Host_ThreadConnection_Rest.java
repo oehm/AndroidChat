@@ -5,25 +5,27 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.Socket;
+import java.net.HttpURLConnection;
 
-public class Host_ThreadConnection_Sockets implements Runnable{
+import org.json.JSONException;
+import org.json.JSONObject;
 
-	private Socket socket_;	
+public class Host_ThreadConnection_Rest implements Runnable{
+
+	private HttpURLConnection connection_;	
 	private BufferedReader input_;
 	private BufferedWriter output_;
 	
 	private String topic_;
 	private String name_;
 	
-	public Host_ThreadConnection_Sockets(Socket socket){
-		socket_ = socket;
+	public Host_ThreadConnection_Rest(HttpURLConnection connection){
+		connection_ = connection;
 		topic_ = null;
 		name_ = null;
 		try {
-
-			input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
-			output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
+			input_ = new BufferedReader(new InputStreamReader(connection_.getInputStream()));
+			output_ = new BufferedWriter(new OutputStreamWriter(connection_.getOutputStream()));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,7 +46,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 			}
 		}
 		try {
-			socket_.close();
+			connection_.disconnect();
 			output_.close();
 			input_.close();
 		} catch (IOException e) {
@@ -55,28 +57,29 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	
 	private void parseInput(String input){
 		//parse and call correct functions on the ChatRoom_Host instance
-		int eqIdx;
-		eqIdx = input.indexOf('=');
-		
-		if(eqIdx==-1)
-		{
-			//invalid message
+		JSONObject jsonIn;
+		String keyWord;
+		String value;
+		try {
+			jsonIn = new JSONObject(input);		
+			keyWord = jsonIn.getString("Command");
+			value = jsonIn.getString("Value");
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 			return;
 		}
-		String keyWord = input.substring(0, eqIdx);
+
 		
 		if(keyWord.equals("name"))
 		{
-			String name = input.substring(eqIdx+1); 
-			name_ = name; 
+			name_ = value; 
 		}
 		else if(keyWord.equals("remove_name"))
 		{
 			if(name_ == null || topic_ == null) return;
-			
-			String name = input.substring(eqIdx+1);;
 			try {
-				Host_ChatRoom.Instance().removeParticipant(name,topic_);
+				Host_ChatRoom.Instance().removeParticipant(value,topic_);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,10 +88,8 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 		else if(keyWord.equals("message"))
 		{
 			if(name_ == null || topic_ ==null) return;
-			
-			String message = input.substring(eqIdx+1);
 			try {
-				Host_ChatRoom.Instance().sendMessage(name_,topic_,message);
+				Host_ChatRoom.Instance().sendMessage(name_,topic_,value);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,9 +97,8 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 		}
 		else if(keyWord.equals("add_topic"))
 		{
-			String topic = input.substring(eqIdx+1);
 			try {
-				Host_ChatRoom.Instance().addTopic(topic);
+				Host_ChatRoom.Instance().addTopic(value);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -106,9 +106,8 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 		}
 		else if(keyWord.equals("remove_toppic"))
 		{
-			String topic = input.substring(eqIdx+1);
 			try {
-				Host_ChatRoom.Instance().removeTopic(topic);
+				Host_ChatRoom.Instance().removeTopic(value);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -118,8 +117,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 		else if(keyWord.equals("join_topic"))
 		{
 			if(name_ == null) return;
-			String topic =input.substring(eqIdx+1);
-			topic_ = topic;
+			topic_ = value;
 			try {
 				Host_ChatRoom.Instance().addParticipant(name_, topic_);
 			} catch (IOException e) {
@@ -138,20 +136,22 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 			
 			try {
 				String messages = Host_ChatRoom.Instance().getMessages(topic_);
-				if(messages!= null)
-					output_.write(messages);
+				JSONObject jsonOut = new JSONObject();
+				try {
+					jsonOut.put("value", messages);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					output_.write(jsonOut.toString());
 					output_.newLine();
 					output_.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
+			}			
 		}
 		else
-			return;
-		
-		
-		
+			return;		
 	}
 }

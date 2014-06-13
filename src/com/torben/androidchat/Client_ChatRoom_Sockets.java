@@ -138,7 +138,7 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	}
 	
 	@Override
-	public void connect() throws IOException {
+	public void connect(){
 		// TODO Auto-generated method stubs
 		new Thread()
 		{
