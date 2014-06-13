@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import android.util.Log;
+
 public class Host_ThreadConnection_Sockets implements Runnable{
 
 	private Socket socket_;	
@@ -55,6 +57,8 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	
 	private void parseInput(String input){
 		//parse and call correct functions on the ChatRoom_Host instance
+		Log.v("Host:",input);
+		
 		int eqIdx;
 		eqIdx = input.indexOf('=');
 		

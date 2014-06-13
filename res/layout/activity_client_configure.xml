@@ -25,6 +25,11 @@
        android:hint="@string/hint_client_port"
        android:inputType="number" />
 
-    
+    <Button
+        android:id="@+id/testButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test" />
 
 </LinearLayout>
