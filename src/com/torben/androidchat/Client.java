@@ -37,7 +37,7 @@ public class Client {
 		switch(connectionType_){
 		case rest:
 			try {
-				chatRoom_ = new Client_ChatRoom_Rest(host);
+				chatRoom_ = new Client_ChatRoom_RPC(host);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (IOException e1) {

@@ -5,11 +5,18 @@
     android:orientation="vertical" >
 
     <ToggleButton
-        android:id="@+id/toggle_host"
+        android:id="@+id/toggle_host_socket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textOn="@string/toggle_host_turn_on"
-        android:textOff="@string/toggle_host_turn_off" />
+        android:textOn="@string/toggle_host_socket_turn_on"
+        android:textOff="@string/toggle_host_socket_turn_off" />
+        
+    <ToggleButton
+        android:id="@+id/toggle_host_rest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="@string/toggle_host_rest_turn_on"
+        android:textOff="@string/toggle_host_rest_turn_off" />
     
 
 </LinearLayout>
