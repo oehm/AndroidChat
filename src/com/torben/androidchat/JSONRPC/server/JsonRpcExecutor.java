@@ -16,8 +16,19 @@
 
 package com.torben.androidchat.JSONRPC.server;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import com.torben.androidchat.JSONRPC.commons.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,18 +41,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.torben.androidchat.JSONRPC.commons.JsonRpcErrorCodes;
-import com.torben.androidchat.JSONRPC.commons.JsonRpcException;
-import com.torben.androidchat.JSONRPC.commons.JsonRpcRemoteException;
-import com.torben.androidchat.JSONRPC.commons.RpcIntroSpection;
-import com.torben.androidchat.JSONRPC.commons.TypeChecker;
-
 
 public final class JsonRpcExecutor implements RpcIntroSpection {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JsonRpcExecutor.class);
 
     private static final Pattern METHOD_PATTERN = Pattern
             .compile("([_a-zA-Z][_a-zA-Z0-9]*)\\.([_a-zA-Z][_a-zA-Z0-9]*)");
@@ -50,10 +53,25 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
     private final TypeChecker typeChecker;
     private volatile boolean locked;
+    
+    private final Gson gson;
+
+    public JsonRpcExecutor() {
+        this(new GsonTypeChecker(), new Gson());
+    }
+
+    public JsonRpcExecutor(Gson gson) {
+        this(new GsonTypeChecker(), gson);
+    }
+
+    public JsonRpcExecutor(TypeChecker typeChecker) {
+    	this(typeChecker, new Gson());
+    }
 
     @SuppressWarnings("unchecked")
-    public JsonRpcExecutor(TypeChecker typeChecker) {
+    public JsonRpcExecutor(TypeChecker typeChecker, Gson gson) {
         this.typeChecker = typeChecker;
+		this.gson = gson;
         this.handlers = new HashMap<String, HandleEntry<?>>();
         addHandler("system", this, RpcIntroSpection.class);
     }
@@ -76,31 +94,36 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         }
     }
 
-    public void execute(JsonRpcServerTransport transport) throws JSONException {
+    public void execute(JsonRpcServerTransport transport) {
         if (!locked) {
             synchronized (handlers) {
                 locked = true;
             }
+            LOG.info("locking executor to avoid modification");
         }
 
         String methodName = null;
-        JSONArray params = null;
+        JsonArray params = null;
 
-        JSONObject resp = new JSONObject();
-        resp.put("jsonrpc", "2.0");
+        JsonObject resp = new JsonObject();
+        resp.addProperty("jsonrpc", "2.0");
 
         String errorMessage = null;
         Integer errorCode = null;
         String errorData = null;
 
-        JSONObject req = null;
+        JsonObject req = null;
         try {
             String requestData = transport.readRequest();
-            req = new JSONObject(requestData);
+            LOG.debug("JSON-RPC >>  {}", requestData);
+            JsonParser parser = new JsonParser();
+            req = (JsonObject) parser.parse(new StringReader(requestData));
         } catch (Throwable t) {
             errorCode = JsonRpcErrorCodes.PARSE_ERROR_CODE;
             errorMessage = "unable to parse json-rpc request";
             errorData = getStackTrace(t);
+
+            LOG.warn(errorMessage, t);
 
             sendError(transport, resp, errorCode, errorMessage, errorData);
             return;
@@ -109,26 +132,29 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         try {
             assert req != null;
-            resp.put("id", req.get("id"));
+            resp.add("id", req.get("id"));
 
-            methodName = req.getString("method");
-            params = (JSONArray) req.get("params");
+            methodName = req.getAsJsonPrimitive("method").getAsString();
+            params = (JsonArray) req.get("params");
             if (params == null) {
-                params = new JSONArray();
+                params = new JsonArray();
             }
         } catch (Throwable t) {
             errorCode = JsonRpcErrorCodes.INVALID_REQUEST_ERROR_CODE;
             errorMessage = "unable to read request";
             errorData = getStackTrace(t);
 
+
+            LOG.warn(errorMessage, t);
             sendError(transport, resp, errorCode, errorMessage, errorData);
             return;
         }
 
         try {
-            Object result = executeMethod(methodName, params);
-            resp.put("result", result);
+            JsonElement result = executeMethod(methodName, params);
+            resp.add("result", result);
         } catch (Throwable t) {
+            LOG.warn("exception occured while executing : " + methodName, t);
             if (t instanceof JsonRpcRemoteException) {
                 sendError(transport, resp, (JsonRpcRemoteException) t);
                 return;
@@ -142,36 +168,40 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         try {
             String responseData = resp.toString();
+            LOG.debug("JSON-RPC result <<  {}", responseData);
             transport.writeResponse(responseData);
         } catch (Exception e) {
+            LOG.warn("unable to write response : " + resp, e);
         }
     }
 
-    private void sendError(JsonRpcServerTransport transport, JSONObject resp, JsonRpcRemoteException e) {
-        //sendError(transport, resp, e.getCode(), e.getMessage(), e.getData());
+    private void sendError(JsonRpcServerTransport transport, JsonObject resp, JsonRpcRemoteException e) {
+        sendError(transport, resp, e.getCode(), e.getMessage(), e.getData());
     }
 
-    private void sendError(JsonRpcServerTransport transport, JSONObject resp, Integer code, String message, String data) throws JSONException {
-        JSONObject error = new JSONObject();
+    private void sendError(JsonRpcServerTransport transport, JsonObject resp, Integer code, String message, String data) {
+        JsonObject error = new JsonObject();
         if (code != null) {
-            error.put("code", code);
+            error.addProperty("code", code);
         }
 
         if (message != null) {
-            error.put("message", message);
+            error.addProperty("message", message);
         }
 
         if (data != null) {
-            error.put("data", data);
+            error.addProperty("data", data);
         }
 
-        resp.put("error", error);
+        resp.add("error", error);
         resp.remove("result");
         String responseData = resp.toString();
 
+        LOG.debug("JSON-RPC error <<  {}", responseData);
         try {
             transport.writeResponse(responseData);
         } catch (Exception e) {
+            LOG.error("unable to write error response : " + responseData, e);
         }
     }
 
@@ -183,8 +213,8 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         return str.toString();
     }
 
-    private Object executeMethod(String methodName, JSONArray params) throws Throwable {
-    	try {
+    private JsonElement executeMethod(String methodName, JsonArray params) throws Throwable {
+        try {
             Matcher mat = METHOD_PATTERN.matcher(methodName);
             if (!mat.find()) {
                 throw new JsonRpcRemoteException(JsonRpcErrorCodes.INVALID_REQUEST_ERROR_CODE, "invalid method name", null);
@@ -217,7 +247,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
             Object result = executableMethod.invoke(
                     handleEntry.getHandler(), getParameters(executableMethod, params));
 
-            return result;
+            return gson.toJsonTree(result);
         } catch (Throwable t) {
             if (t instanceof InvocationTargetException) {
                 t = ((InvocationTargetException) t).getTargetException();
@@ -229,20 +259,21 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         }
     }
 
-    public boolean canExecute(Method method, JSONArray params) {
-        if (method.getParameterTypes().length != params.length()) {
+    public boolean canExecute(Method method, JsonArray params) {
+        if (method.getParameterTypes().length != params.size()) {
             return false;
         }
 
         return true;
     }
 
-    public Object[] getParameters(Method method, JSONArray params) throws JSONException {
+    public Object[] getParameters(Method method, JsonArray params) {
         List<Object> list = new ArrayList<Object>();
         Class<?>[] types = method.getParameterTypes();
         for (int i = 0; i < types.length; i++) {
-            list.add(params.get(i));
-
+            JsonElement p = params.get(i);
+            Object o = gson.fromJson(p.toString(), types[i]);
+            list.add(o);
         }
         return list.toArray();
     }

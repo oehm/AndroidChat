@@ -14,8 +14,6 @@
     <string name="button_start_host">Configure Host</string>
     <string name="toggle_host_socket_turn_on">Sockets on</string>
     <string name="toggle_host_socket_turn_off">Sockets off</string>
-    <string name="toggle_host_rest_turn_on">Rest on</string>
-    <string name="toggle_host_rest_turn_off">Rest off</string>
     <string name="hint_client_host">enter host</string>
     <string name="hint_client_port">enter port</string>
     

@@ -5,22 +5,21 @@ import android.util.Log;
 public class Host {
 	private static Host instance_ = null;
 	
+	@SuppressWarnings("unused")
+	private static Host_JsonRpcServlet RPCServelt_= null;
+	
 	public static Host Instance(){
 		if(instance_ == null){
 			instance_ = new Host();
+			RPCServelt_ = new Host_JsonRpcServlet();
 		}
 		return instance_;
 	}
 	
 	private Thread hostSocketThread_ = null;
-	private Thread hostRestThread_ = null;
 	
 	public boolean getSocketState(){
 		return hostSocketThread_ != null;
-	}
-	
-	public boolean getRestState(){
-		return hostRestThread_ != null;
 	}
 	
 	public void setSocketsState(boolean on) {
@@ -36,22 +35,6 @@ public class Host {
 			Log.v("Host:","Sockets got turned off");
 			hostSocketThread_.interrupt();
 			hostSocketThread_ = null;
-		}
-	}
-	
-	public void setRestState(boolean on) {
-		// TODO Auto-generated method stub
-		if(on){
-			if(hostRestThread_ != null) return;
-			Log.v("Host:","Rest got turned on");
-			hostRestThread_ = new Thread(new Host_ThreadMain_RPC());
-			hostRestThread_.start();
-		}
-		else {
-			if(hostRestThread_ == null) return;
-			Log.v("Host:","Rest got turned off");
-			hostRestThread_.interrupt();
-			hostRestThread_ = null;
 		}
 	}
 }

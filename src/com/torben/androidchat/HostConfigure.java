@@ -11,7 +11,6 @@ import android.widget.ToggleButton;
 public class HostConfigure extends Activity {
 
 	private ToggleButton toggleSockets_;
-	private ToggleButton toggleRest_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +29,6 @@ public class HostConfigure extends Activity {
 		    }
 		});
 		toggleSockets_.setChecked(Host.Instance().getSocketState());
-		
-		//rest:
-		toggleRest_ = (ToggleButton) findViewById(R.id.toggle_host_rest);
-		toggleRest_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				    @Override
-				    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				        // Save the state here
-				    	Host.Instance().setRestState(isChecked);
-				    }
-				});
-		toggleRest_.setChecked(Host.Instance().getRestState());
 	}
 
 	/**
