@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 
     <string name="app_name">AndroidChat</string>
@@ -10,13 +10,14 @@
     <string name="toggle_client_turn_off">Connect</string>
     <string name="hint_client_host">enter host</string>
     <string name="hint_client_port">enter port</string>
-    <string name="text_host_ip">no ip yet</string>
-    <string name="text_host_port">no port yet</string>
+    
     
     <string name="title_activity_host_configure">HostConfigure</string>
     <string name="button_start_host">Configure Host</string>
-    <string name="toggle_host_turn_on">Sockets on</string>
-    <string name="toggle_host_turn_off">Sockets off</string>
+    <string name="toggle_host_socket_turn_on">Sockets on</string>
+    <string name="toggle_host_socket_turn_off">Sockets off</string>
+    <string name="text_host_ip">no ip yet</string>
+    <string name="text_host_port">no port yet</string>
     
     
     <string name="hello_world">Hello world!</string>

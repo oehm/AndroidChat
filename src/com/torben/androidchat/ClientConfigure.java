@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
@@ -13,6 +16,8 @@ public class ClientConfigure extends Activity {
 	private ToggleButton toggleConnection_;
 	private EditText editHost_;
 	private EditText editPort_;
+	
+	private Button test_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,7 @@ public class ClientConfigure extends Activity {
 		editHost_ = (EditText)findViewById(R.id.text_client_host);
 		editPort_ = (EditText)findViewById(R.id.text_client_port);
 		
+		
 		//connection
 		toggleConnection_ = (ToggleButton) findViewById(R.id.toggle_client_connection);
 		toggleConnection_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -35,6 +41,17 @@ public class ClientConfigure extends Activity {
 		    }
 		});
 		toggleConnection_.setChecked(Client.Instance().getConnectionState());
+		
+		test_ = (Button)findViewById(R.id.testButton);
+		
+		 OnClickListener startListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.v("Client/Server", Client.Instance().test());
+			}
+		 };
+		
+		test_.setOnClickListener(startListener);
 	}
 	
 	@Override

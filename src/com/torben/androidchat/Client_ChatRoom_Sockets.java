@@ -13,6 +13,8 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	Socket socket_;
 	
 	private BufferedReader input_;
+	private String inputString_ = null;
+	
 	private BufferedWriter output_;
 	
 	private String host_;
@@ -102,11 +104,32 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 		output_.flush();
 		
 		String messages = null;
-		while(messages == null)
+		
+		new Thread()
 		{
-			messages = input_.readLine();
+			@Override
+		    public void run()
+		    {
+		        try {
+					threadReadInput();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		}.start();
+		
+		while(inputString_ == null)
+		{
 		}
+		messages = inputString_;
+		inputString_ = null;
 		return messages;
+	}
+	
+	private void threadReadInput() throws IOException
+	{
+		inputString_ = input_.readLine();
 	}
 
 	@Override
@@ -138,7 +161,7 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	}
 	
 	@Override
-	public void connect() throws IOException {
+	public void connect(){
 		// TODO Auto-generated method stubs
 		new Thread()
 		{

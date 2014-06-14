@@ -23,7 +23,7 @@ public class HostConfigure extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//sockets:
-		toggleSockets_ = (ToggleButton) findViewById(R.id.toggle_host);
+		toggleSockets_ = (ToggleButton) findViewById(R.id.toggle_host_socket);
 		toggleSockets_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 		    @Override
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

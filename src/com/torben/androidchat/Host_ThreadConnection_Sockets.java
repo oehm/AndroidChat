@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import android.util.Log;
+
 public class Host_ThreadConnection_Sockets implements Runnable{
 
 	private Socket socket_;	
@@ -55,6 +57,8 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	
 	private void parseInput(String input){
 		//parse and call correct functions on the ChatRoom_Host instance
+		Log.v("Host:",input);
+		
 		int eqIdx;
 		eqIdx = input.indexOf('=');
 		
@@ -68,21 +72,15 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 		if(keyWord.equals("name"))
 		{
 			String name = input.substring(eqIdx+1); 
-			try {
-				if(Host_ChatRoom.Instance().addParticipant(name,""))
-					name_ = name; 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			name_ = name; 
 		}
 		else if(keyWord.equals("remove_name"))
 		{
-			if(name_ == null) return;
+			if(name_ == null || topic_ == null) return;
 			
 			String name = input.substring(eqIdx+1);;
 			try {
-				Host_ChatRoom.Instance().removeParticipant(name,"");
+				Host_ChatRoom.Instance().removeParticipant(name,topic_);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

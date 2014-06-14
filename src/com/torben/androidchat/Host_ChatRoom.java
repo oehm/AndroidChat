@@ -6,6 +6,11 @@ import java.util.List;
 
 public class Host_ChatRoom {
 
+	private Host_ChatRoom()
+	{
+		topics_ = new ArrayList<Host_ChatRoom.Topic>();
+	}
+	
 	private static Host_ChatRoom instance_ = null;
 	
 	public static Host_ChatRoom Instance(){
@@ -88,7 +93,9 @@ public class Host_ChatRoom {
 		for (Topic t : topics_) {
 			if(t.getName().equals(topic)){
 				String result = "";
-				for(int i = t.messages.size()-11; i<t.messages.size();i++){
+				int startIndex =t.messages.size()-11;
+				if(startIndex < 0) startIndex = 0;
+				for(int i = startIndex; i<t.messages.size();i++){
 					result += t.messages.get(i) +";;";
 				}
 				return result;

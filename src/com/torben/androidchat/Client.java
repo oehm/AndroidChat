@@ -15,8 +15,8 @@ public class Client {
 		return instance_;
 	}
 	
-	public enum ConnectionType {sockets, rest};
-	private ConnectionType connectionType_ = ConnectionType.sockets;
+	public enum ConnectionType {sockets, rpc};
+	private ConnectionType connectionType_ = ConnectionType.rpc;
 	
 	public enum ConnectionStatus {connected, connecting, disconnected, disconnecting};
 	private ConnectionStatus connectionStatus_ = ConnectionStatus.disconnected;
@@ -35,9 +35,9 @@ public class Client {
 		if(connectionStatus_!= ConnectionStatus.disconnected) return;
 		
 		switch(connectionType_){
-		case rest:
+		case rpc:
 			try {
-				chatRoom_ = new Client_ChatRoom_Rest(host);
+				chatRoom_ = new Client_ChatRoom_RPC(host,port);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (IOException e1) {
@@ -86,5 +86,20 @@ public class Client {
 			if(connectionStatus_ == ConnectionStatus.connecting) connectionStatus_ = ConnectionStatus.disconnected;
 			if(connectionStatus_ == ConnectionStatus.disconnecting) connectionStatus_ = ConnectionStatus.connected;
 		}
+	}
+	
+	public String test()
+	{
+		try {
+			chatRoom_.addParticipant("MeleeCampz");
+			chatRoom_.addTopic("TestTopic");
+			chatRoom_.joinTopic("TestTopic");
+			chatRoom_.sendMessage("This is a message!");
+			return chatRoom_.getMessages();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

@@ -56,7 +56,7 @@ public class Host_ThreadMain_Sockets  implements Runnable{
 			if(client != null)
 			{
 				Thread thread = new Thread(new Host_ThreadConnection_Sockets(client));
-				
+				thread.start();
 				clientThreads_.add(thread);
 			}
 		}
