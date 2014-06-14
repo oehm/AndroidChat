@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import android.util.Log;
+
 import com.torben.androidchat.JSONRPC.server.JsonRpcExecutor;
 import com.torben.androidchat.JSONRPC.server.JsonRpcServletTransport;
 
@@ -16,16 +18,15 @@ public class Host_ThreadMain_JsonRpcServlet extends HttpServlet implements Runna
 	private final JsonRpcExecutor executor_;
 
     public Host_ThreadMain_JsonRpcServlet() throws ServletException {
-        executor_ = bind();
+		super();
+    	executor_ = bind();
     }
 
-    @SuppressWarnings("unchecked")
 	private JsonRpcExecutor bind() {
-        JsonRpcExecutor executor_ = new JsonRpcExecutor();
+		JsonRpcExecutor executor_ = new JsonRpcExecutor();
         
         Client_ChatRoom clientImpl = new Host_RPC_Executor();
         executor_.addHandler("RPCExec",clientImpl,Client_ChatRoom.class);
-        // add more services here
 
         return executor_;
     }

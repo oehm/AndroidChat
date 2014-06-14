@@ -10,7 +10,8 @@ public class Host {
 		Host_ThreadMain_JsonRpcServlet th_rpc = null;
 		try {
 			th_rpc  = new Host_ThreadMain_JsonRpcServlet();
-			th_rpc.init();	
+			th_rpc.init();
+			Log.v("RPC","ServerInfo: " + th_rpc.getServletInfo());
 			hostRPCThread_ = new Thread(th_rpc);
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
