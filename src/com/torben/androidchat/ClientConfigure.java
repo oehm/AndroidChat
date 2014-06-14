@@ -2,13 +2,15 @@ package com.torben.androidchat;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ToggleButton;
@@ -18,12 +20,12 @@ import com.torben.androidchat.Client.ConnectionType;
 
 public class ClientConfigure extends Activity {
 
-	private ToggleButton toggleConnection_;
+	private EditText editName_;
+	private EditText editTopic_;
 	private EditText editHost_;
 	private EditText editPort_;
+	private ToggleButton toggleConnection_;
 	private RadioGroup radioGroupType_;
-	
-	private Button test_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +34,9 @@ public class ClientConfigure extends Activity {
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		
-		editHost_ = (EditText)findViewById(R.id.text_client_host);
-		editPort_ = (EditText)findViewById(R.id.text_client_port);
-		
-		
+		setupEdits();
 		setupConnectionToggle();
 		setupRadioGroupSetter();
-		
-		test_ = (Button)findViewById(R.id.testButton);
-		
-		 OnClickListener startListener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v("Client/Server", Client.Instance().test());
-			}
-		 };
-		
-		test_.setOnClickListener(startListener);
 	}
 	
 	@Override
@@ -59,6 +46,85 @@ public class ClientConfigure extends Activity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	private void setupEdits() {
+		editHost_ = (EditText)findViewById(R.id.text_client_host);
+		editPort_ = (EditText)findViewById(R.id.text_client_port);
+		editName_ = (EditText)findViewById(R.id.text_client_username);
+		editTopic_ = (EditText)findViewById(R.id.text_client_topic);
+		
+		
+		if(Client.Instance().host_!=null) editHost_.setText(Client.Instance().host_);
+		if(Client.Instance().port_!=0) editPort_.setText(""+Client.Instance().port_);
+		if(Client.Instance().userName_!=null) editName_.setText(Client.Instance().userName_);
+		if(Client.Instance().topic_!=null) editTopic_.setText(Client.Instance().topic_);
+		
+		
+		editHost_.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(s.toString()!=null) Client.Instance().host_= s.toString();
+			}
+		});
+		editPort_.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(s.toString()!=null) Client.Instance().port_= Integer.parseInt(s.toString());
+			}
+		});
+		editName_.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(s.toString()!=null) Client.Instance().userName_= s.toString();
+			}
+		});
+		editTopic_.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(s.toString()!=null) Client.Instance().topic_= s.toString();
+			}
+		});
+	}
 	
 	private void setupConnectionToggle(){
 		toggleConnection_ = (ToggleButton) findViewById(R.id.toggle_client_connection);
@@ -71,7 +137,9 @@ public class ClientConfigure extends Activity {
 					
 					String host = editHost_.getText().toString();
 					int port = Integer.parseInt(editPort_.getText().toString());
-					Client.Instance().connect(host, port);
+					Client.Instance().host_ = host;
+					Client.Instance().port_ = port;
+					Client.Instance().connect();
 				}
 				else {
 					Log.v("Client:","disconnecting");
@@ -91,6 +159,22 @@ public class ClientConfigure extends Activity {
 	
 	private void setupRadioGroupSetter(){
 		radioGroupType_ = (RadioGroup) findViewById(R.id.radioGroup_client_type);
+		radioGroupType_.clearCheck();
+		RadioButton rb;
+		switch (Client.Instance().connectionType_) {
+		case sockets:
+			rb = (RadioButton)findViewById(R.id.radioButton_client_type_sockets);
+			rb.setChecked(true);
+			break;
+		case rpc:
+			rb = (RadioButton)findViewById(R.id.radioButton_client_type_rpc);
+			rb.setChecked(true);
+			break;
+
+		default:
+			break;
+		}
+		
 		radioGroupType_.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override

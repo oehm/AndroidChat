@@ -53,10 +53,18 @@
         android:textOff="@string/toggle_client_turn_off"
         android:textOn="@string/toggle_client_turn_on" />
 
-    <Button
-        android:id="@+id/testButton"
+    <EditText
+        android:id="@+id/text_client_username"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Test" />
+        android:layout_height="wrap_content" 
+        android:hint="@string/hint_client_username"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/text_client_topic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:hint="@string/hint_client_topic"
+        android:inputType="text" />
 
 </LinearLayout>

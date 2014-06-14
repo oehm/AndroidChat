@@ -7,13 +7,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_start_host" 
-        android:onClick="startHost" />
+        android:text="@string/button_start_hostconfigure" 
+        android:onClick="startHostConfigure" />
         
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_start_client" 
-        android:onClick="startClient" />
+        android:text="@string/button_start_clientconfigure" 
+        android:onClick="startClientConfigure" />
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_start_clientchat" 
+        android:onClick="startClientChat" />
 
 </LinearLayout>

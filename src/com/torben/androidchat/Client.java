@@ -22,6 +22,12 @@ public class Client {
 	private ConnectionStatus connectionStatus_ = ConnectionStatus.disconnected;
 	
 	private Client_ChatRoom chatRoom_;
+
+	public String host_ = null;
+	public int port_ = 0;
+	public String userName_ = null;
+	public String topic_ = null;
+	
 	
 	private Client(){
 		chatRoom_ = null;;
@@ -31,13 +37,13 @@ public class Client {
 		return connectionStatus_;
 	}
 	
-	public void connect(String host, int port){
+	public void connect(){
 		if(connectionStatus_!= ConnectionStatus.disconnected) return;
 		
 		switch(connectionType_){
 		case rpc:
 			try {
-				chatRoom_ = new Client_ChatRoom_RPC(host,port);
+				chatRoom_ = new Client_ChatRoom_RPC(host_,port_);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (IOException e1) {
@@ -48,7 +54,7 @@ public class Client {
 			
 		case sockets:
 			try {
-				chatRoom_ = new Client_ChatRoom_Sockets(host,port);
+				chatRoom_ = new Client_ChatRoom_Sockets(host_,port_);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (UnknownHostException e) {
@@ -88,20 +94,7 @@ public class Client {
 		}
 	}
 	
-	
-	
-	public String test()
-	{
-		try {
-			chatRoom_.addParticipant("MeleeCampz");
-			chatRoom_.addTopic("TestTopic");
-			chatRoom_.joinTopic("TestTopic");
-			chatRoom_.sendMessage("This is a message!");
-			return chatRoom_.getMessages();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "";
+	public Client_ChatRoom getChatroom(){
+		return chatRoom_;
 	}
 }

@@ -93,9 +93,9 @@ public class Host_ChatRoom {
 		for (Topic t : topics_) {
 			if(t.getName().equals(topic)){
 				String result = "";
-				int startIndex =t.messages.size()-11;
-				if(startIndex < 0) startIndex = 0;
-				for(int i = startIndex; i<t.messages.size();i++){
+				//int startIndex =t.messages.size()-11;
+				//if(startIndex < 0) startIndex = 0;
+				for(int i = 0; i<t.messages.size();i++){
 					result += t.messages.get(i) +";;";
 				}
 				return result;
