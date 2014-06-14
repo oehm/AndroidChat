@@ -106,7 +106,6 @@ public final class JsonRpcInvoker {
         	//throw new JsonRpcClientException("unable to get data from transport", e);
         }
         LOG.debug("JSON-RPC <<  {}", responseData);
-        Log.v("JSON-RPC <<  {}", responseData);
         
         JsonParser parser = new JsonParser();
         JsonObject resp = (JsonObject) parser.parse(new StringReader(responseData));

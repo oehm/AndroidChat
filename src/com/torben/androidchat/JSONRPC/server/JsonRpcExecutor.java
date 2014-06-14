@@ -21,7 +21,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
+import com.torben.androidchat.JSONRPC.client.HttpJsonRpcClientTransport;
+import com.torben.androidchat.JSONRPC.client.JsonRpcClientTransport;
 import com.torben.androidchat.JSONRPC.commons.*;
 
 import org.slf4j.Logger;
@@ -94,7 +95,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         }
     }
 
-    public void execute(JsonRpcServerTransport transport) {
+    public void execute(HttpJsonRpcClientTransport transport) {
         if (!locked) {
             synchronized (handlers) {
                 locked = true;
@@ -114,7 +115,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         JsonObject req = null;
         try {
-            String requestData = transport.readRequest();
+            String requestData = transport.execute((String[]) null).get();
             LOG.debug("JSON-RPC >>  {}", requestData);
             JsonParser parser = new JsonParser();
             req = (JsonObject) parser.parse(new StringReader(requestData));
@@ -169,17 +170,17 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         try {
             String responseData = resp.toString();
             LOG.debug("JSON-RPC result <<  {}", responseData);
-            transport.writeResponse(responseData);
+            transport.execute(responseData);
         } catch (Exception e) {
             LOG.warn("unable to write response : " + resp, e);
         }
     }
 
-    private void sendError(JsonRpcServerTransport transport, JsonObject resp, JsonRpcRemoteException e) {
+    private void sendError(HttpJsonRpcClientTransport transport, JsonObject resp, JsonRpcRemoteException e) {
         sendError(transport, resp, e.getCode(), e.getMessage(), e.getData());
     }
 
-    private void sendError(JsonRpcServerTransport transport, JsonObject resp, Integer code, String message, String data) {
+    private void sendError(HttpJsonRpcClientTransport transport, JsonObject resp, Integer code, String message, String data) {
         JsonObject error = new JsonObject();
         if (code != null) {
             error.addProperty("code", code);
@@ -199,7 +200,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         LOG.debug("JSON-RPC error <<  {}", responseData);
         try {
-            transport.writeResponse(responseData);
+            transport.execute(responseData);
         } catch (Exception e) {
             LOG.error("unable to write error response : " + responseData, e);
         }

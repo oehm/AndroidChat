@@ -155,9 +155,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 			
 		}
 		else
-			return;
-		
-		
+			return;	
 		
 	}
 }

@@ -1,7 +1,5 @@
 package com.torben.androidchat;
 
-import javax.servlet.ServletException;
-
 import android.util.Log;
 
 public class Host {
@@ -54,16 +52,7 @@ public class Host {
 		if(on){
 			if(hostRPCThread_ != null) return;
 			Log.v("Host:","RPC got turned on");
-			Host_ThreadMain_JsonRpcServlet th_rpc = null;
-			try {
-				th_rpc  = new Host_ThreadMain_JsonRpcServlet();
-				th_rpc.init();	
-				hostRPCThread_ = new Thread(th_rpc);
-			} catch (ServletException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Log.v("RPC",th_rpc.getServletInfo());
+			hostRPCThread_ = new Thread(new Host_ThreadMain_RPC());
 			hostRPCThread_.start();
 		}
 		else {

@@ -16,125 +16,67 @@
 
 package com.torben.androidchat.JSONRPC.client;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.torben.androidchat.JSONRPC.commons.*;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
+import java.net.Socket;
+
+import android.os.AsyncTask;
 
 public class HttpJsonRpcClientTransport extends AsyncTask<String, Integer, String> implements JsonRpcClientTransport {
 
-    private URL url;
-    private final Map<String, String> headers;
+	Socket socket_;
 
-    public HttpJsonRpcClientTransport(URL url) {
-        this.url = url;
-        this.headers = new HashMap<String, String>();
-    }
+	private BufferedReader input_;
+	private BufferedWriter output_;
 
-    public final void setHeader(String key, String value) {
-        this.headers.put(key, value);
+    public HttpJsonRpcClientTransport(Socket socket, BufferedReader reader, BufferedWriter writer) {
+        socket_ = socket;
+        input_ = reader;
+        output_ = writer;
     }
 
 	@Override
 	protected String doInBackground(String... params) {
-		try {
-			return call(params[0]);
-		} catch (IOException e) {
-			return null;
-		} catch (Exception e) {
-			return null;
+		if(params != null)
+		{
+			try {
+				return call(params[0]);
+			} catch (IOException e) {
+				return null;
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		else
+		{
+			try {
+				return read();
+			} catch (IOException e) {
+				return null;
+			}
 		}
 	}
-    
-    protected void onProgressUpdate(Integer... progress) {
-        
-    }
-
-    protected void onPostExecute(Long result) {
-        
-    }
-
-	
 	
     public final String call(String requestData) throws Exception, IOException {
-        String responseData = post(url, headers, requestData);
+        String responseData = post(requestData);
         return responseData;
     }
 
-    private String post(URL url, Map<String, String> headers, String data) throws IOException {
-    	
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    private String post(String data) throws IOException {
         
+    	output_.write(data);
+    	output_.newLine();
+        output_.flush();
+        output_.close();
         
-        if (headers != null) {
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                connection.addRequestProperty(entry.getKey(), entry.getValue());
-            }
-        }
-        connection.addRequestProperty("Accept-Encoding", "gzip");
-        connection.setRequestMethod("Post");
-        connection.setDoOutput(true);
-        //connection.setChunkedStreamingMode(0); //myCode
-        Log.v("RPC", "try to connect!");
-        connection.connect();  //error here
-        Log.v("RPC", "connected!");
-        OutputStream out = null;
-        
-        try {
-        	out = connection.getOutputStream();
-        	out.write(data.getBytes());
-            out.flush();
-            out.close();
-
-            int statusCode = connection.getResponseCode();
-            if (statusCode != HttpURLConnection.HTTP_OK) {
-            	throw new JsonRpcClientException("unexpected status code returned : " + statusCode);
-            }
-        } finally {
-            if (out != null) {            	
-            	out.close();
-            }
-        }
-
-        Log.v("RPC_POST", "still working2");
-        
-        String responseEncoding = connection.getHeaderField("Content-Encoding");
-        responseEncoding = (responseEncoding == null ? "" : responseEncoding.trim());
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-        InputStream in = connection.getInputStream();
-        try {
-            in = connection.getInputStream();
-            if ("gzip".equalsIgnoreCase(responseEncoding)) {
-                in = new GZIPInputStream(in);
-            }
-            in = new BufferedInputStream(in);
-
-            byte[] buff = new byte[1024];
-            int n;
-            while ((n = in.read(buff)) > 0) {
-                bos.write(buff, 0, n);
-            }
-            bos.flush();
-            bos.close();
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-        }        
-        return bos.toString();
+        return input_.readLine();
+    }
+    
+    private String read() throws IOException
+    {
+    	String input =null;
+		input = input_.readLine();
+    	return input;
     }
 }
