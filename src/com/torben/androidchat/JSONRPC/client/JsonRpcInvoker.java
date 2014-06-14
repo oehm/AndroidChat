@@ -25,13 +25,15 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.torben.androidchat.JSONRPC.commons.GsonTypeChecker;
-import com.torben.androidchat.JSONRPC.commons.JsonRpcClientException;
 import com.torben.androidchat.JSONRPC.commons.JsonRpcRemoteException;
 import com.torben.androidchat.JSONRPC.commons.TypeChecker;
 
@@ -63,7 +65,7 @@ public final class JsonRpcInvoker {
     }
 
     @SuppressWarnings("unchecked")
-	public <T> T get(final JsonRpcClientTransport transport, final String handle, final Class<T>... classes) {
+	public <T> T get(final HttpJsonRpcClientTransport transport, final String handle, final Class<T>... classes) {
         for (Class<T> clazz : classes) {
             typeChecker.isValidInterface(clazz);
         }
@@ -75,7 +77,7 @@ public final class JsonRpcInvoker {
     }
 
     private Object invoke(String handleName,
-                          JsonRpcClientTransport transport, Method method,
+    		HttpJsonRpcClientTransport transport, Method method,
                           Object[] args) throws Throwable {
         int id = rand.nextInt(Integer.MAX_VALUE);
         String methodName = handleName + "." + method.getName();
@@ -94,14 +96,18 @@ public final class JsonRpcInvoker {
 
         String requestData = req.toString();
         LOG.debug("JSON-RPC >>  {}", requestData);
-        String responseData;
+        //Log.v("JSON-RPC >>  {}", requestData);
+        String responseData = null;
         try {
-            responseData = transport.call(requestData);
-        } catch (Exception e) {
-            throw new JsonRpcClientException("unable to get data from transport", e);
+            AsyncTask<String, Integer, String> ret = transport.execute(requestData);
+        	responseData = ret.get();
+        }
+        catch (Exception e) {
+        	//throw new JsonRpcClientException("unable to get data from transport", e);
         }
         LOG.debug("JSON-RPC <<  {}", responseData);
-
+        Log.v("JSON-RPC <<  {}", responseData);
+        
         JsonParser parser = new JsonParser();
         JsonObject resp = (JsonObject) parser.parse(new StringReader(responseData));
 

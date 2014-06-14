@@ -16,7 +16,7 @@ public class Client {
 	}
 	
 	public enum ConnectionType {sockets, rpc};
-	private ConnectionType connectionType_ = ConnectionType.sockets;
+	private ConnectionType connectionType_ = ConnectionType.rpc;
 	
 	public enum ConnectionStatus {connected, connecting, disconnected, disconnecting};
 	private ConnectionStatus connectionStatus_ = ConnectionStatus.disconnected;
@@ -37,7 +37,7 @@ public class Client {
 		switch(connectionType_){
 		case rpc:
 			try {
-				chatRoom_ = new Client_ChatRoom_RPC(host);
+				chatRoom_ = new Client_ChatRoom_RPC(host,port);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (IOException e1) {

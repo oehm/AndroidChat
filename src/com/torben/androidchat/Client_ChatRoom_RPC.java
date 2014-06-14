@@ -1,6 +1,7 @@
 package com.torben.androidchat;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -10,20 +11,24 @@ import com.torben.androidchat.JSONRPC.client.JsonRpcInvoker;
 public class Client_ChatRoom_RPC implements Client_ChatRoom {
 
     private String host_;
+    private int port_;
+    
+    
     private HttpJsonRpcClientTransport transport_;
     private Client_ChatRoom RPCExec_;
 	
-	public Client_ChatRoom_RPC (String host) throws IOException
+	public Client_ChatRoom_RPC (String host,int port) throws IOException
 	{
 		host_ = host;
+		port_ = port;
 	}
-	
-	
 	
 	@Override
 	public boolean addParticipant(String name) throws IOException {
 		return RPCExec_.addParticipant(name);
 	}
+	
+	
 
 	@Override
 	public boolean removeParticipant(String name) throws IOException {
@@ -65,12 +70,13 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 	{
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void connect() 
 	{
-		try {
-			transport_ = new HttpJsonRpcClientTransport(new URL(host_));
+		//String url = "http://127.0.0.1:8080/jsonrpc"
+		String url = "http://"+host_+":"+port_;
+		try{	
+			transport_ = new HttpJsonRpcClientTransport(new URL(url));
 			JsonRpcInvoker invoker = new JsonRpcInvoker();
 			RPCExec_ = invoker.get(transport_, "RPCExec", Client_ChatRoom.class);
 			Client.Instance().finishConnectionState(true);

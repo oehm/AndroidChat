@@ -16,9 +16,13 @@
 
 package com.torben.androidchat.JSONRPC.client;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import com.torben.androidchat.JSONRPC.commons.*;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-public class HttpJsonRpcClientTransport implements JsonRpcClientTransport {
+public class HttpJsonRpcClientTransport extends AsyncTask<String, Integer, String> implements JsonRpcClientTransport {
 
     private URL url;
     private final Map<String, String> headers;
@@ -43,47 +47,69 @@ public class HttpJsonRpcClientTransport implements JsonRpcClientTransport {
         this.headers.put(key, value);
     }
 
-    public final String call(String requestData) throws Exception {
+	@Override
+	protected String doInBackground(String... params) {
+		try {
+			return call(params[0]);
+		} catch (IOException e) {
+			return null;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+    
+    protected void onProgressUpdate(Integer... progress) {
+        
+    }
+
+    protected void onPostExecute(Long result) {
+        
+    }
+
+	
+	
+    public final String call(String requestData) throws Exception, IOException {
         String responseData = post(url, headers, requestData);
         return responseData;
     }
 
-    private String post(URL url, Map<String, String> headers, String data)
-            throws IOException {
-
+    private String post(URL url, Map<String, String> headers, String data) throws IOException {
+    	
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
+        
+        
         if (headers != null) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 connection.addRequestProperty(entry.getKey(), entry.getValue());
             }
         }
-
         connection.addRequestProperty("Accept-Encoding", "gzip");
-
-        connection.setRequestMethod("POST");
+        connection.setRequestMethod("Post");
         connection.setDoOutput(true);
-        connection.connect();
-
+        //connection.setChunkedStreamingMode(0); //myCode
+        Log.v("RPC", "try to connect!");
+        connection.connect();  //error here
+        Log.v("RPC", "connected!");
         OutputStream out = null;
-
+        
         try {
-            out = connection.getOutputStream();
-
-            out.write(data.getBytes());
+        	out = connection.getOutputStream();
+        	out.write(data.getBytes());
             out.flush();
             out.close();
 
             int statusCode = connection.getResponseCode();
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                throw new JsonRpcClientException("unexpected status code returned : " + statusCode);
+            	throw new JsonRpcClientException("unexpected status code returned : " + statusCode);
             }
         } finally {
-            if (out != null) {
-                out.close();
+            if (out != null) {            	
+            	out.close();
             }
         }
 
+        Log.v("RPC_POST", "still working2");
+        
         String responseEncoding = connection.getHeaderField("Content-Encoding");
         responseEncoding = (responseEncoding == null ? "" : responseEncoding.trim());
 
@@ -108,8 +134,7 @@ public class HttpJsonRpcClientTransport implements JsonRpcClientTransport {
             if (in != null) {
                 in.close();
             }
-        }
-
+        }        
         return bos.toString();
     }
 }
