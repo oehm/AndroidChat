@@ -6,18 +6,21 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class HostConfigure extends Activity {
 
 	private ToggleButton toggleSockets_;
+	private TextView textIp_;
+	private TextView textPort_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_host_configure);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//sockets:
 		toggleSockets_ = (ToggleButton) findViewById(R.id.toggle_host);
@@ -29,15 +32,15 @@ public class HostConfigure extends Activity {
 		    }
 		});
 		toggleSockets_.setChecked(Host.Instance().getSocketState());
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
+		textIp_ = (TextView) findViewById(R.id.text_host_ip);
+		textPort_ = (TextView) findViewById(R.id.text_host_port);
+		
+		if(Host.Instance().ip!=null)
+			textIp_.setText(Host.Instance().ip);
+		
+		if(Host.Instance().port!=0)
+			textPort_.setText(Host.Instance().port+"");
 	}
 
 	@Override

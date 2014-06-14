@@ -10,6 +10,18 @@
         android:layout_height="wrap_content"
         android:textOn="@string/toggle_host_turn_on"
         android:textOff="@string/toggle_host_turn_off" />
+        
+   	<TextView
+   		android:id="@+id/text_host_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_host_ip" />
+        
+   	<TextView
+   		android:id="@+id/text_host_port"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_host_port" />
     
 
 </LinearLayout>

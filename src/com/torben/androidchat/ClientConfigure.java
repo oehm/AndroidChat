@@ -19,7 +19,7 @@ public class ClientConfigure extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_configure);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		
 		editHost_ = (EditText)findViewById(R.id.text_client_host);
@@ -36,15 +36,6 @@ public class ClientConfigure extends Activity {
 		});
 		toggleConnection_.setChecked(Client.Instance().getConnectionState());
 	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,6 +43,7 @@ public class ClientConfigure extends Activity {
 		getMenuInflater().inflate(R.menu.client_configure, menu);
 		return true;
 	}
+	
 	
 	private void handleConnectionChanged(boolean on){
 		if(on){

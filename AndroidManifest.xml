@@ -36,6 +36,10 @@
         <activity
             android:name="com.torben.androidchat.ClientConfigure"
             android:label="@string/title_activity_client_configure" >
+            android:parentActivityName="com.torben.androidchat.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.torben.androidchat.MainActivity" />
         </activity>
     </application>
 

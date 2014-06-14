@@ -14,6 +14,9 @@ public class Host {
 	
 	private Thread hostSocketThread_ = null;
 	
+	public String ip = null;
+	public int port= 0;
+	
 	public boolean getSocketState(){
 		return hostSocketThread_ != null;
 	}
