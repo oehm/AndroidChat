@@ -76,9 +76,7 @@ public final class JsonRpcInvoker {
         });
     }
 
-    private Object invoke(String handleName,
-    		HttpJsonRpcClientTransport transport, Method method,
-                          Object[] args) throws Throwable {
+    private Object invoke(String handleName, HttpJsonRpcClientTransport transport, Method method,  Object[] args) throws Throwable {
         int id = rand.nextInt(Integer.MAX_VALUE);
         String methodName = handleName + "." + method.getName();
 
