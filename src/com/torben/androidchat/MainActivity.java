@@ -21,15 +21,18 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	/* Called when the user clicks the start Host button.*/
-    public void startHost(View view){
+    public void startHostConfigure(View view){
     	Intent intent = new Intent(this, HostConfigure.class);
     	startActivity(intent);
     }
     
-    /* Called when the user clicks the start Client button.*/
-    public void startClient(View view){
+    public void startClientConfigure(View view){
     	Intent intent = new Intent(this, ClientConfigure.class);
+    	startActivity(intent);
+    }
+    
+    public void startClientChat(View view){
+    	Intent intent = new Intent(this, ClientChat.class);
     	startActivity(intent);
     }
 
