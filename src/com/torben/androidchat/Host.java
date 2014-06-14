@@ -7,18 +7,7 @@ import android.util.Log;
 public class Host {
 	private Host()
 	{
-		Host_ThreadMain_JsonRpcServlet th_rpc = null;
-		try {
-			th_rpc  = new Host_ThreadMain_JsonRpcServlet();
-			th_rpc.init();
-			Log.v("RPC","ServerInfo: " + th_rpc.getServletInfo());
-			hostRPCThread_ = new Thread(th_rpc);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Log.v("RPC",th_rpc.getServletInfo());
-		hostRPCThread_.start();
+
 	}
 	
 	private static Host instance_ = null;
@@ -53,6 +42,35 @@ public class Host {
 			Log.v("Host:","Sockets got turned off");
 			hostSocketThread_.interrupt();
 			hostSocketThread_ = null;
+		}
+	}
+	
+	public boolean getRPCState(){
+		return hostRPCThread_ != null;
+	}
+	
+	public void setRPCState(boolean on) {
+		// TODO Auto-generated method stub
+		if(on){
+			if(hostRPCThread_ != null) return;
+			Log.v("Host:","RPC got turned on");
+			Host_ThreadMain_JsonRpcServlet th_rpc = null;
+			try {
+				th_rpc  = new Host_ThreadMain_JsonRpcServlet();
+				th_rpc.init();	
+				hostRPCThread_ = new Thread(th_rpc);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Log.v("RPC",th_rpc.getServletInfo());
+			hostRPCThread_.start();
+		}
+		else {
+			if(hostRPCThread_ == null) return;
+			Log.v("Host:","RPC got turned off");
+			hostRPCThread_.interrupt();
+			hostRPCThread_ = null;
 		}
 	}
 }

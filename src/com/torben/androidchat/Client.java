@@ -16,7 +16,7 @@ public class Client {
 	}
 	
 	public enum ConnectionType {sockets, rpc};
-	private ConnectionType connectionType_ = ConnectionType.rpc;
+	public ConnectionType connectionType_ = ConnectionType.sockets;
 	
 	public enum ConnectionStatus {connected, connecting, disconnected, disconnecting};
 	private ConnectionStatus connectionStatus_ = ConnectionStatus.disconnected;
@@ -27,8 +27,8 @@ public class Client {
 		chatRoom_ = null;;
 	}
 	
-	public boolean getConnectionState(){
-		return connectionStatus_ != ConnectionStatus.disconnected;
+	public ConnectionStatus getConnectionStatus(){
+		return connectionStatus_;
 	}
 	
 	public void connect(String host, int port){
@@ -87,6 +87,8 @@ public class Client {
 			if(connectionStatus_ == ConnectionStatus.disconnecting) connectionStatus_ = ConnectionStatus.connected;
 		}
 	}
+	
+	
 	
 	public String test()
 	{
