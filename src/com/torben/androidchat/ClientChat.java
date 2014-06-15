@@ -42,6 +42,15 @@ public class ClientChat extends Activity {
 				e.printStackTrace();
 			}
 		}
+		else{
+			TextView newLine;
+			newLine = new TextView(this);
+			newLine.setText("not properly connected... check your settings!");
+	    	display_.addView(newLine);
+	    	newLine = new TextView(this);
+			newLine.setText("refresh connection status and ask the host if everything is fine");
+	    	display_.addView(newLine);
+		}
 		refreshMessages(null);
 	}
 
@@ -50,7 +59,7 @@ public class ClientChat extends Activity {
         super.onPause();
         
 		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
-		if(chatroom != null){
+		if(chatroom != null&&ClientApp.Instance().userName_!=null&&ClientApp.Instance().topic_!=null){
 			try {
 				chatroom.leaveTopic(ClientApp.Instance().topic_);
 				chatroom.removeParticipant(ClientApp.Instance().userName_);
@@ -102,7 +111,7 @@ public class ClientChat extends Activity {
 	public void refreshMessages(View view){
 		String message = null;
 		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
-		if(chatroom != null){
+		if(chatroom != null&&ClientApp.Instance().userName_!=null&&ClientApp.Instance().topic_!=null){
 			try {
 				message = chatroom.getMessages();
 			} catch (IOException e) {

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 import android.util.Log;
 
@@ -20,6 +21,12 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	
 	public Host_ThreadConnection_Sockets(Socket socket){
 		socket_ = socket;
+		try {
+			socket_.setSoTimeout(2000);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		topic_ = null;
 		name_ = null;
 		try {
@@ -35,14 +42,15 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		String read = null;
 		while (!Thread.currentThread().isInterrupted()&& socket_.isConnected()) {
-
 			try {
-				String read = input_.readLine();
+				read = input_.readLine();
+				if(read == null) break;
 				parseInput(read);
+				read = null;
 
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		try {
@@ -58,7 +66,9 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	
 	private void parseInput(String input){
 		//parse and call correct functions on the ChatRoom_Host instance
-		if(input ==null) return;
+		if(input ==null){
+			return;
+		}
 		
 		Log.v("Host:",input);
 		

@@ -23,10 +23,10 @@ public class ClientApp {
 	
 	private Client_ChatRoom chatRoom_;
 
-	public String host_ = null;
+	public String host_ = "";
 	public int port_ = 0;
-	public String userName_ = null;
-	public String topic_ = null;
+	public String userName_ = "";
+	public String topic_ = "";
 	
 	
 	private ClientApp(){

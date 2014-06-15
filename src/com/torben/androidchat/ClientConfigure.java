@@ -97,7 +97,15 @@ public class ClientConfigure extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString()!=null) ClientApp.Instance().port_= Integer.parseInt(s.toString());
+				int port = 0;
+				try{
+					port = Integer.parseInt(s.toString());
+				}
+				catch(NumberFormatException e){
+					
+				}
+				
+				if(port != 0) ClientApp.Instance().port_= port;
 			}
 		});
 		editName_.addTextChangedListener(new TextWatcher() {
@@ -134,9 +142,15 @@ public class ClientConfigure extends Activity {
 		        // Save the state here
 		    	if(isChecked){
 					Log.v("Client:","connecting");
-					
+								
 					String host = editHost_.getText().toString();
-					int port = Integer.parseInt(editPort_.getText().toString());
+					int port=0;
+					try {
+						port = Integer.parseInt(editPort_.getText().toString());
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+					}
+					
 					ClientApp.Instance().host_ = host;
 					ClientApp.Instance().port_ = port;
 					ClientApp.Instance().connect();
