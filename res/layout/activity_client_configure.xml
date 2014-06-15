@@ -21,6 +21,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/radio_client_type_rpc" />
+
+        <RadioButton
+            android:id="@+id/radioButton_client_type_rmi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_client_type_rmi" />
+
     </RadioGroup>
 
     <LinearLayout
@@ -46,12 +53,27 @@
             android:inputType="number" />
     </LinearLayout>
 
-    <ToggleButton
-        android:id="@+id/toggle_client_connection"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textOff="@string/toggle_client_turn_off"
-        android:textOn="@string/toggle_client_turn_on" />
+        android:orientation="horizontal" >
+
+        <ToggleButton
+            android:id="@+id/toggle_client_connection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="@string/toggle_client_turn_off"
+            android:textOn="@string/toggle_client_turn_on" />
+
+        <Button
+            android:id="@+id/button_client_status_refresh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_client_refresh" 
+        	android:onClick="refreshStatus"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/text_client_username"

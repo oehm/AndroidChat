@@ -25,13 +25,13 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/text_host_ip"
+                android:id="@+id/text_host_ip_sockets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_host_ip" />
 
             <TextView
-                android:id="@+id/text_host_port"
+                android:id="@+id/text_host_port_sockets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_host_port" />
@@ -53,5 +53,82 @@
         android:layout_height="wrap_content"
         android:textOff="@string/toggle_host_rpc_turn_off"
         android:textOn="@string/toggle_host_rpc_turn_on" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/text_host_ip_rpc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_host_ip" />
+
+            <TextView
+                android:id="@+id/text_host_port_rpc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_host_port" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_host_refresh_rpc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:onClick="refreshRPC"
+            android:text="@string/button_host_refresh" />
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/toggle_host_rmi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textOff="@string/toggle_host_rmi_off"
+        android:textOn="@string/toggle_host_rmi_on" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/text_host_ip_rmi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_host_ip" />
+
+            <TextView
+                android:id="@+id/text_host_port_rmi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_host_port" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_host_refresh_rmi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:onClick="refreshRMI"
+            android:text="@string/button_host_refresh" />
+    </LinearLayout>
 
 </LinearLayout>

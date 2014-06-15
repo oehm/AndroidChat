@@ -36,8 +36,7 @@ public class Host_ChatRoom {
 		return false;
 	}
 
-	public boolean removeParticipant(String name, String topic)
-			throws IOException {
+	public boolean removeParticipant(String name, String topic)throws IOException {
 		// TODO Auto-generated method stub
 		for (Topic t : topics_) {
 			if(t.getName().equals(topic)){

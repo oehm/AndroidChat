@@ -5,17 +5,17 @@ import java.net.UnknownHostException;
 
 import android.util.Log;
 
-public class Client {
-	private static Client instance_ = null;
+public class ClientApp {
+	private static ClientApp instance_ = null;
 	
-	public static Client Instance(){
+	public static ClientApp Instance(){
 		if(instance_ == null){
-			instance_ = new Client();
+			instance_ = new ClientApp();
 		}
 		return instance_;
 	}
 	
-	public enum ConnectionType {sockets, rpc};
+	public enum ConnectionType {sockets, rpc, rmi};
 	public ConnectionType connectionType_ = ConnectionType.sockets;
 	
 	public enum ConnectionStatus {connected, connecting, disconnected, disconnecting};
@@ -29,7 +29,7 @@ public class Client {
 	public String topic_ = null;
 	
 	
-	private Client(){
+	private ClientApp(){
 		chatRoom_ = null;;
 	}
 	
@@ -44,6 +44,17 @@ public class Client {
 		case rpc:
 			try {
 				chatRoom_ = new Client_ChatRoom_RPC(host_,port_);
+				connectionStatus_ = ConnectionStatus.connecting;
+				chatRoom_.connect();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+			
+		case rmi:
+			try {
+				chatRoom_ = new Client_ChatRoom_RMI(host_,port_);
 				connectionStatus_ = ConnectionStatus.connecting;
 				chatRoom_.connect();
 			} catch (IOException e1) {

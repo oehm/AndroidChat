@@ -11,13 +11,13 @@
     <string name="hint_client_port">enter port</string>
     <string name="radio_client_type_sockets">Sockets</string>
     <string name="radio_client_type_rpc">RPC</string>
-    <string name="title_activity_host_configure">HostConfigure</string>
+    <string name="radio_client_type_rmi">RMI</string><string name="title_activity_host_configure">HostConfigure</string>
     <string name="button_start_hostconfigure">Configure Host</string>
     <string name="toggle_host_socket_turn_on">Sockets on</string>
     <string name="toggle_host_socket_turn_off">Sockets off</string>
     <string name="toggle_host_rpc_turn_on">RPC on</string>
     <string name="toggle_host_rpc_turn_off">RPC off</string>
-    <string name="text_host_ip">no ip yet</string>
+    <string name="toggle_host_rmi_off">RMI off</string><string name="toggle_host_rmi_on">RMI on</string><string name="text_host_ip">no ip yet</string>
     <string name="text_host_port">no port yet</string>
     <string name="button_host_refresh">refresh</string>
     <string name="title_activity_client_chat">ClientChat</string>
@@ -26,5 +26,10 @@
     <string name="button_client_refresh">refresh</string>
     <string name="hint_client_username">username</string>
     <string name="hint_client_topic">topic</string>
+    <string name="toggle_client_turning_on">connecting....</string>
+    <string name="toggle_client_turning_off">disconnecting....</string>
+    
+    
+    
 
 </resources>

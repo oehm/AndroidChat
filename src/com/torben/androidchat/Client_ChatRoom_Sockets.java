@@ -152,9 +152,9 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	{
 		try {
 			socket_.close();
-			Client.Instance().finishConnectionState(true);
+			ClientApp.Instance().finishConnectionState(true);
 		} catch (IOException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -179,13 +179,13 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 			socket_ = new Socket(host_, port_);
 			input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
 			output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
-			Client.Instance().finishConnectionState(true);
+			ClientApp.Instance().finishConnectionState(true);
 		} catch (UnknownHostException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
