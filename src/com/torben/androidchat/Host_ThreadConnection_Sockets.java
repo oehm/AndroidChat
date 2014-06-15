@@ -35,7 +35,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while (!Thread.currentThread().isInterrupted()) {
+		while (!Thread.currentThread().isInterrupted()&& socket_.isConnected()) {
 
 			try {
 				String read = input_.readLine();
@@ -53,6 +53,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Log.v("Socket","DISSCONNECTED");
 	}
 	
 	private void parseInput(String input){

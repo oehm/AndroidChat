@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import android.os.SystemClock;
+import android.provider.Settings.System;
 import android.util.Log;
 
 public class HttpJsonRpcClientTransport{
@@ -31,7 +32,7 @@ public class HttpJsonRpcClientTransport{
 	private BufferedReader input_;
 	private BufferedWriter output_;
 
-	private final long TimeoutTime = 1000;
+	private final long TimeoutTime = 3000;
 	
     public HttpJsonRpcClientTransport(Socket socket, BufferedReader reader, BufferedWriter writer) {
         socket_ = socket;
@@ -46,7 +47,7 @@ public class HttpJsonRpcClientTransport{
 		sb.append("!");
 		if(requestData != null)
 		{
-			new Thread()
+			Thread th = new Thread()
 			{
 				@Override
 				public void run()
@@ -61,12 +62,14 @@ public class HttpJsonRpcClientTransport{
 						e.printStackTrace();
 					}
 				}
-			}.start();
+			};
+			th.start();
 			while(sb.toString().equals("!"));
 			{
 				if(SystemClock.elapsedRealtime() - time > TimeoutTime)
 				{
-					Log.v("TRANSPORT","timed out!");
+					Log.v("TRANSPORT","timed out post!");
+					th.interrupt();
 					return sb.toString();
 				}
 			}
@@ -74,13 +77,15 @@ public class HttpJsonRpcClientTransport{
 		}
 		else
 		{
-			new Thread()
+			Thread th =new Thread()
 			{
 				@Override
 				public void run()
 				{
 					try {
+						Log.v("THREADREAD", "start reading!");
 						String r = read();
+						Log.v("THREADREAD", "end reading!");
 						sb.delete(0,1);
 						sb.append(r);
 					} catch (IOException e) {
@@ -89,12 +94,14 @@ public class HttpJsonRpcClientTransport{
 						e.printStackTrace();
 					}
 				}
-			}.start();
+			};
+			th.start();
 			while(sb.toString().equals("!"));
 			{
 				if(SystemClock.elapsedRealtime() - time > TimeoutTime)
 				{
-					Log.v("TRANSPORT","timed out!");
+					Log.v("TRANSPORT","timed out get!");
+					th.interrupt();
 					return sb.toString();
 				}
 			}
@@ -109,7 +116,7 @@ public class HttpJsonRpcClientTransport{
 
     private String post(String data) throws IOException {
     	output_.write(data);
-    	output_.newLine();
+    	//output_.newLine();
         output_.flush();
         Log.v("Transport", "Sended data: "+ data);
         return read();
@@ -117,8 +124,15 @@ public class HttpJsonRpcClientTransport{
     
     private String read() throws IOException
     {
-    	String input ="";
-    	input = input_.readLine();
+    	String input = null;
+    	long time = SystemClock.elapsedRealtime();
+    	while(input== null)
+    	{
+    		if(input_.ready())
+    			input = input_.readLine();
+    		if(SystemClock.elapsedRealtime() - time > TimeoutTime)
+    			input = "FAIL!";
+    	}
     	Log.v("Transport", "Recived data: "+input);
     	return input;
     }

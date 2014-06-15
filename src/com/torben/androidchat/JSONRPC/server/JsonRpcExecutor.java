@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.os.Debug;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -128,6 +127,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
             	Log.v("EXECUTOR", "no Data");
             	return;
             }
+            Log.v("EXECUTOR",requestData);
             JsonParser parser = new JsonParser();
             req = (JsonObject) parser.parse(new StringReader(requestData));
         } catch (Throwable t) {
