@@ -16,18 +16,6 @@
 
 package com.torben.androidchat.JSONRPC.server;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.torben.androidchat.JSONRPC.client.HttpJsonRpcClientTransport;
-import com.torben.androidchat.JSONRPC.client.JsonRpcClientTransport;
-import com.torben.androidchat.JSONRPC.commons.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -41,6 +29,25 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import android.os.Debug;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.torben.androidchat.JSONRPC.client.HttpJsonRpcClientTransport;
+import com.torben.androidchat.JSONRPC.commons.GsonTypeChecker;
+import com.torben.androidchat.JSONRPC.commons.JsonRpcErrorCodes;
+import com.torben.androidchat.JSONRPC.commons.JsonRpcException;
+import com.torben.androidchat.JSONRPC.commons.JsonRpcRemoteException;
+import com.torben.androidchat.JSONRPC.commons.RpcIntroSpection;
+import com.torben.androidchat.JSONRPC.commons.TypeChecker;
 
 
 public final class JsonRpcExecutor implements RpcIntroSpection {
@@ -115,8 +122,12 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         JsonObject req = null;
         try {
-            String requestData = transport.execute((String[]) null).get();
-            LOG.debug("JSON-RPC >>  {}", requestData);
+            String requestData = transport.threadedCall(null);
+            if(requestData == null)
+            {
+            	Log.v("EXECUTOR", "no Data");
+            	return;
+            }
             JsonParser parser = new JsonParser();
             req = (JsonObject) parser.parse(new StringReader(requestData));
         } catch (Throwable t) {
@@ -124,6 +135,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
             errorMessage = "unable to parse json-rpc request";
             errorData = getStackTrace(t);
 
+            Log.v("EXECUTOR","Somethign went wrong parsing");
             LOG.warn(errorMessage, t);
 
             sendError(transport, resp, errorCode, errorMessage, errorData);
@@ -134,8 +146,8 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
         try {
             assert req != null;
             resp.add("id", req.get("id"));
-
             methodName = req.getAsJsonPrimitive("method").getAsString();
+            Log.v("EXECUTOR","metohdname = "+methodName);
             params = (JsonArray) req.get("params");
             if (params == null) {
                 params = new JsonArray();
@@ -169,8 +181,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         try {
             String responseData = resp.toString();
-            LOG.debug("JSON-RPC result <<  {}", responseData);
-            transport.execute(responseData);
+            transport.threadedCall(responseData);
         } catch (Exception e) {
             LOG.warn("unable to write response : " + resp, e);
         }
@@ -200,7 +211,7 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
 
         LOG.debug("JSON-RPC error <<  {}", responseData);
         try {
-            transport.execute(responseData);
+            transport.threadedCall(responseData);
         } catch (Exception e) {
             LOG.error("unable to write error response : " + responseData, e);
         }
@@ -215,7 +226,8 @@ public final class JsonRpcExecutor implements RpcIntroSpection {
     }
 
     private JsonElement executeMethod(String methodName, JsonArray params) throws Throwable {
-        try {
+        Log.v("EXECUTOR", "try to execute Method: "+methodName);
+    	try {
             Matcher mat = METHOD_PATTERN.matcher(methodName);
             if (!mat.find()) {
                 throw new JsonRpcRemoteException(JsonRpcErrorCodes.INVALID_REQUEST_ERROR_CODE, "invalid method name", null);

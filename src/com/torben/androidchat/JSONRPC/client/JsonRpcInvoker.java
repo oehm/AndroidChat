@@ -25,15 +25,13 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.torben.androidchat.JSONRPC.commons.GsonTypeChecker;
+import com.torben.androidchat.JSONRPC.commons.JsonRpcClientException;
 import com.torben.androidchat.JSONRPC.commons.JsonRpcRemoteException;
 import com.torben.androidchat.JSONRPC.commons.TypeChecker;
 
@@ -96,14 +94,9 @@ public final class JsonRpcInvoker {
         LOG.debug("JSON-RPC >>  {}", requestData);
         //Log.v("JSON-RPC >>  {}", requestData);
         String responseData = null;
-        try {
-            AsyncTask<String, Integer, String> ret = transport.execute(requestData);
-        	responseData = ret.get();
-        }
-        catch (Exception e) {
-        	//throw new JsonRpcClientException("unable to get data from transport", e);
-        }
-        LOG.debug("JSON-RPC <<  {}", responseData);
+
+    	responseData = transport.threadedCall(requestData);
+        //Log.v("Invoker", "respondMSG: "+responseData);
         
         JsonParser parser = new JsonParser();
         JsonObject resp = (JsonObject) parser.parse(new StringReader(responseData));

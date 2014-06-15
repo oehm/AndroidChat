@@ -2,6 +2,8 @@ package com.torben.androidchat;
 
 import java.io.IOException;
 
+import android.util.Log;
+
 public class Host_RPC_Executor implements Client_ChatRoom {
 
 	private String name_ = null;

@@ -21,62 +21,105 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
 
-import android.os.AsyncTask;
+import android.os.SystemClock;
+import android.util.Log;
 
-public class HttpJsonRpcClientTransport extends AsyncTask<String, Integer, String> implements JsonRpcClientTransport {
+public class HttpJsonRpcClientTransport{
 
 	Socket socket_;
 
 	private BufferedReader input_;
 	private BufferedWriter output_;
 
+	private final long TimeoutTime = 1000;
+	
     public HttpJsonRpcClientTransport(Socket socket, BufferedReader reader, BufferedWriter writer) {
         socket_ = socket;
         input_ = reader;
         output_ = writer;
     }
-
-	@Override
-	protected String doInBackground(String... params) {
-		if(params != null)
+	
+	public String threadedCall(final String requestData)
+	{
+		long time = SystemClock.elapsedRealtime();
+		final StringBuilder sb = new StringBuilder();
+		sb.append("!");
+		if(requestData != null)
 		{
-			try {
-				return call(params[0]);
-			} catch (IOException e) {
-				return null;
-			} catch (Exception e) {
-				return null;
+			new Thread()
+			{
+				@Override
+				public void run()
+				{
+					try {
+						String r = call(requestData);
+						sb.delete(0,1);
+						sb.append(r);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}.start();
+			while(sb.toString().equals("!"));
+			{
+				if(SystemClock.elapsedRealtime() - time > TimeoutTime)
+				{
+					Log.v("TRANSPORT","timed out!");
+					return sb.toString();
+				}
 			}
+			return sb.toString();
 		}
 		else
 		{
-			try {
-				return read();
-			} catch (IOException e) {
-				return null;
+			new Thread()
+			{
+				@Override
+				public void run()
+				{
+					try {
+						String r = read();
+						sb.delete(0,1);
+						sb.append(r);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}.start();
+			while(sb.toString().equals("!"));
+			{
+				if(SystemClock.elapsedRealtime() - time > TimeoutTime)
+				{
+					Log.v("TRANSPORT","timed out!");
+					return sb.toString();
+				}
 			}
+			return sb.toString();
 		}
 	}
 	
-    public final String call(String requestData) throws Exception, IOException {
-        String responseData = post(requestData);
+    private final String call(String requestData) throws Exception, IOException {
+    	String responseData = post(requestData);
         return responseData;
     }
 
     private String post(String data) throws IOException {
-        
     	output_.write(data);
     	output_.newLine();
         output_.flush();
-        output_.close();
-        
-        return input_.readLine();
+        Log.v("Transport", "Sended data: "+ data);
+        return read();
     }
     
     private String read() throws IOException
     {
-    	String input =null;
-		input = input_.readLine();
+    	String input ="";
+    	input = input_.readLine();
+    	Log.v("Transport", "Recived data: "+input);
     	return input;
     }
 }

@@ -5,10 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
 import java.net.UnknownHostException;
 
 import com.torben.androidchat.JSONRPC.client.HttpJsonRpcClientTransport;
@@ -112,13 +109,13 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 		}.start();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void threadConnect()
 	{
 		try {
 			socket_ = new Socket(host_, port_);
 			input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
 			output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
-			Client.Instance().finishConnectionState(true);
 		} catch (UnknownHostException e) {
 			Client.Instance().finishConnectionState(false);
 			e.printStackTrace();

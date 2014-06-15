@@ -8,8 +8,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.apache.http.conn.util.InetAddressUtils;
-import android.annotation.SuppressLint;
+
 import android.util.Log;
 
 public class Host_ThreadMain_RPC  implements Runnable {
@@ -38,7 +39,6 @@ public class Host_ThreadMain_RPC  implements Runnable {
 	
 		while (!Thread.currentThread().isInterrupted())
 		{
-			Log.v("Host:","Sockets: waiting for connection");
 			for(Thread t : clientThreads_){
 				if(t.isInterrupted()){
 					clientThreads_.remove(t);

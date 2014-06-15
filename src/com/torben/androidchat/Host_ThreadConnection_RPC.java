@@ -12,11 +12,12 @@ import android.util.Log;
 import com.torben.androidchat.JSONRPC.client.HttpJsonRpcClientTransport;
 import com.torben.androidchat.JSONRPC.server.JsonRpcExecutor;
 
-public class Host_ThreadConnection_RPC implements Client_ChatRoom, Runnable{
+public class Host_ThreadConnection_RPC implements Runnable{
 
 	 
 	private final JsonRpcExecutor executor_;
-	 
+	
+	private Host_RPC_Executor remoteObj_; 
 	private Socket socket_;
 	private BufferedReader input_;
 	private BufferedWriter output_;
@@ -35,7 +36,8 @@ public class Host_ThreadConnection_RPC implements Client_ChatRoom, Runnable{
 	private JsonRpcExecutor bind() {
 		JsonRpcExecutor executor_ = new JsonRpcExecutor();
         //Client_ChatRoom clientImpl = new Host_RPC_Executor();
-        executor_.addHandler("RPCExec",this,Client_ChatRoom.class);
+        remoteObj_ = new Host_RPC_Executor();
+		executor_.addHandler("RPCExec",remoteObj_,Client_ChatRoom.class);
         return executor_;
     }
 
@@ -45,6 +47,7 @@ public class Host_ThreadConnection_RPC implements Client_ChatRoom, Runnable{
 			executor_.execute(transpot_);
 		}
 		try {
+			Log.v("RPC", "ClientDisconnect!");
 			socket_.close();
 			output_.close();
 			input_.close();
@@ -53,65 +56,4 @@ public class Host_ThreadConnection_RPC implements Client_ChatRoom, Runnable{
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public boolean addParticipant(String name) throws IOException {
-		Log.v("Host", name);
-		return false;
-	}
-
-	@Override
-	public boolean removeParticipant(String name) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addTopic(String topic) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeTopic(String topic) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean joinTopic(String topic) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean leaveTopic(String topic) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean sendMessage(String message) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String getMessages() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void disconnect() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void connect() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
