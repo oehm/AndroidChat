@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -15,8 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-import com.torben.androidchat.Client.ConnectionStatus;
-import com.torben.androidchat.Client.ConnectionType;
+import com.torben.androidchat.ClientApp.ConnectionType;
 
 public class ClientConfigure extends Activity {
 
@@ -70,10 +70,10 @@ public class ClientConfigure extends Activity {
 		editTopic_ = (EditText)findViewById(R.id.text_client_topic);
 		
 		
-		if(Client.Instance().host_!=null) editHost_.setText(Client.Instance().host_);
-		if(Client.Instance().port_!=0) editPort_.setText(""+Client.Instance().port_);
-		if(Client.Instance().userName_!=null) editName_.setText(Client.Instance().userName_);
-		if(Client.Instance().topic_!=null) editTopic_.setText(Client.Instance().topic_);
+		if(ClientApp.Instance().host_!=null) editHost_.setText(ClientApp.Instance().host_);
+		if(ClientApp.Instance().port_!=0) editPort_.setText(""+ClientApp.Instance().port_);
+		if(ClientApp.Instance().userName_!=null) editName_.setText(ClientApp.Instance().userName_);
+		if(ClientApp.Instance().topic_!=null) editTopic_.setText(ClientApp.Instance().topic_);
 		
 		
 		editHost_.addTextChangedListener(new TextWatcher() {
@@ -85,7 +85,7 @@ public class ClientConfigure extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString()!=null) Client.Instance().host_= s.toString();
+				if(s.toString()!=null) ClientApp.Instance().host_= s.toString();
 			}
 		});
 		editPort_.addTextChangedListener(new TextWatcher() {
@@ -97,7 +97,7 @@ public class ClientConfigure extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString()!=null) Client.Instance().port_= Integer.parseInt(s.toString());
+				if(s.toString()!=null) ClientApp.Instance().port_= Integer.parseInt(s.toString());
 			}
 		});
 		editName_.addTextChangedListener(new TextWatcher() {
@@ -109,7 +109,7 @@ public class ClientConfigure extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString()!=null) Client.Instance().userName_= s.toString();
+				if(s.toString()!=null) ClientApp.Instance().userName_= s.toString();
 			}
 		});
 		editTopic_.addTextChangedListener(new TextWatcher() {
@@ -121,7 +121,7 @@ public class ClientConfigure extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString()!=null) Client.Instance().topic_= s.toString();
+				if(s.toString()!=null) ClientApp.Instance().topic_= s.toString();
 			}
 		});
 	}
@@ -137,22 +137,20 @@ public class ClientConfigure extends Activity {
 					
 					String host = editHost_.getText().toString();
 					int port = Integer.parseInt(editPort_.getText().toString());
-					Client.Instance().host_ = host;
-					Client.Instance().port_ = port;
-					Client.Instance().connect();
+					ClientApp.Instance().host_ = host;
+					ClientApp.Instance().port_ = port;
+					ClientApp.Instance().connect();
 				}
 				else {
 					Log.v("Client:","disconnecting");
 					
-					Client.Instance().disconnect();
+					ClientApp.Instance().disconnect();
 				}
-		    	toggleConnection_.setChecked(	Client.Instance().getConnectionStatus()==ConnectionStatus.connected ||
-		    									Client.Instance().getConnectionStatus()==ConnectionStatus.connecting);
+		    	refreshStatus(toggleConnection_);
 		    }
 		});
 		
-		toggleConnection_.setChecked(	Client.Instance().getConnectionStatus()==ConnectionStatus.connected ||
-										Client.Instance().getConnectionStatus()==ConnectionStatus.connecting);
+		refreshStatus(toggleConnection_);
 		
 		
 	}
@@ -161,13 +159,17 @@ public class ClientConfigure extends Activity {
 		radioGroupType_ = (RadioGroup) findViewById(R.id.radioGroup_client_type);
 		radioGroupType_.clearCheck();
 		RadioButton rb;
-		switch (Client.Instance().connectionType_) {
+		switch (ClientApp.Instance().connectionType_) {
 		case sockets:
 			rb = (RadioButton)findViewById(R.id.radioButton_client_type_sockets);
 			rb.setChecked(true);
 			break;
 		case rpc:
 			rb = (RadioButton)findViewById(R.id.radioButton_client_type_rpc);
+			rb.setChecked(true);
+			break;
+		case rmi:
+			rb = (RadioButton)findViewById(R.id.radioButton_client_type_rmi);
 			rb.setChecked(true);
 			break;
 
@@ -181,11 +183,15 @@ public class ClientConfigure extends Activity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
 				case R.id.radioButton_client_type_sockets:
-					Client.Instance().connectionType_=ConnectionType.sockets;
+					ClientApp.Instance().connectionType_=ConnectionType.sockets;
 					break;
 
 				case R.id.radioButton_client_type_rpc:
-					Client.Instance().connectionType_=ConnectionType.rpc;
+					ClientApp.Instance().connectionType_=ConnectionType.rpc;
+					break;
+					
+				case R.id.radioButton_client_type_rmi:
+					ClientApp.Instance().connectionType_=ConnectionType.rmi;
 					break;
 					
 				default:
@@ -196,4 +202,31 @@ public class ClientConfigure extends Activity {
 
         });
 	}
+	
+	public void refreshStatus(View view){
+		switch (ClientApp.Instance().getConnectionStatus()) {
+		case connected:
+			toggleConnection_.setChecked(true);
+			toggleConnection_.setTextOn(this.getString(R.string.toggle_client_turn_on));
+			break;
+			
+		case connecting:
+			toggleConnection_.setChecked(true);
+			toggleConnection_.setTextOn(this.getString(R.string.toggle_client_turning_on));
+			break;
+			
+		case disconnected:
+			toggleConnection_.setChecked(false);
+			toggleConnection_.setTextOff(this.getString(R.string.toggle_client_turn_off));
+			break;
+			
+		case disconnecting:
+			toggleConnection_.setChecked(false);
+			toggleConnection_.setTextOff(this.getString(R.string.toggle_client_turning_off));
+			break;
+
+		default:
+			break;
+		}
+    }
 }

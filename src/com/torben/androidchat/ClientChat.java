@@ -31,12 +31,12 @@ public class ClientChat extends Activity {
 		display_= (LinearLayout)findViewById(R.id.layout_client_chat);
 		scrollview_= (ScrollView)findViewById(R.id.scroll_client_chat);
 		
-		Client_ChatRoom chatroom = Client.Instance().getChatroom();
+		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null){
 			try {
-				chatroom.addParticipant(Client.Instance().userName_);
-				chatroom.addTopic(Client.Instance().topic_);
-				chatroom.joinTopic(Client.Instance().topic_);
+				chatroom.addParticipant(ClientApp.Instance().userName_);
+				chatroom.addTopic(ClientApp.Instance().topic_);
+				chatroom.joinTopic(ClientApp.Instance().topic_);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -49,11 +49,11 @@ public class ClientChat extends Activity {
 	protected void onPause(){
         super.onPause();
         
-		Client_ChatRoom chatroom = Client.Instance().getChatroom();
+		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null){
 			try {
-				chatroom.leaveTopic(Client.Instance().topic_);
-				chatroom.removeParticipant(Client.Instance().userName_);
+				chatroom.leaveTopic(ClientApp.Instance().topic_);
+				chatroom.removeParticipant(ClientApp.Instance().userName_);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,7 +86,7 @@ public class ClientChat extends Activity {
 	}
 	
 	public void sendMessage(View view){
-		Client_ChatRoom chatroom = Client.Instance().getChatroom();
+		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null){
 			try {
 				chatroom.sendMessage(input_.getText().toString());
@@ -101,7 +101,7 @@ public class ClientChat extends Activity {
 
 	public void refreshMessages(View view){
 		String message = null;
-		Client_ChatRoom chatroom = Client.Instance().getChatroom();
+		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null){
 			try {
 				message = chatroom.getMessages();

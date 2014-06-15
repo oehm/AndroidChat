@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="libs/lipermi-0.4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

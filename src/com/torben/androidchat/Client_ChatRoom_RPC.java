@@ -89,9 +89,9 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 	{
 		try {
 			socket_.close();
-			Client.Instance().finishConnectionState(true);
+			ClientApp.Instance().finishConnectionState(true);
 		} catch (IOException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			e.printStackTrace();
 		}
 	}
@@ -117,16 +117,16 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 			input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
 			output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
 		} catch (UnknownHostException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			e.printStackTrace();
 		} catch (IOException e) {
-			Client.Instance().finishConnectionState(false);
+			ClientApp.Instance().finishConnectionState(false);
 			e.printStackTrace();
 		}
 		transport_ = new HttpJsonRpcClientTransport(socket_, input_, output_);
 		JsonRpcInvoker invoker = new JsonRpcInvoker();
 		RPCExec_ = invoker.get(transport_, "RPCExec", Client_ChatRoom.class);
-		Client.Instance().finishConnectionState(true);
+		ClientApp.Instance().finishConnectionState(true);
 	}
 
 }
