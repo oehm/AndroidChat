@@ -1,3 +1,7 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
+
 package com.torben.androidchat;
 
 import java.io.IOException;
@@ -116,12 +120,12 @@ public class Client_ChatRoom_RMI implements Client_ChatRoom {
 	public void connect() throws IOException {
 		// TODO Auto-generated method stub
 		callHandler_ = new CallHandler();
-		Thread thread = new Thread(new Runnable(){
+		Thread thread = new Thread(new Runnable(){ //thread -> no newtworkcommunication on main thread on android
 		    @Override
 		    public void run() {
 		        try {
 		        	client_ = new Client(host_, port_, callHandler_);
-		    		executer_ = (Host_RMI_Executer)client_.getGlobal(Host_RMI_Executer.class);
+		    		executer_ = (Host_RMI_Executer)client_.getGlobal(Host_RMI_Executer.class); //create executor as proxy for remote call
 		    		ClientApp.Instance().finishConnectionState(true);
 		        } catch (Exception e) {
 		        	ClientApp.Instance().finishConnectionState(false);

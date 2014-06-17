@@ -1,9 +1,10 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
-
-import android.util.Log;
-
+// instance that handles name + topic and is binded as remote object
 public class Host_RPC_Executor implements Client_ChatRoom {
 
 	private String name_ = null;

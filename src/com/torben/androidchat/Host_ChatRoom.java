@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
@@ -5,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Host_ChatRoom {
-
+	//singleton that manages all topics
 	private Host_ChatRoom()
 	{
 		topics_ = new ArrayList<Host_ChatRoom.Topic>();
@@ -22,7 +25,7 @@ public class Host_ChatRoom {
 
 	private List<Topic> topics_;
 	
-	public boolean addParticipant(String name, String topic) throws IOException {
+	public boolean addParticipant(String name, String topic) throws IOException { 
 		// TODO Auto-generated method stub
 		for (Topic t : topics_) {
 			if(t.getName().equals(topic)){

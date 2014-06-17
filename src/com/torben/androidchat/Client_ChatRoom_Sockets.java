@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.BufferedReader;
@@ -108,7 +111,7 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 		new Thread()
 		{
 			@Override
-		    public void run()
+		    public void run() //thread because android doesn't allow network communication in main thread
 		    {
 		        try {
 					threadReadInput();
@@ -137,7 +140,7 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	{
 		output_.close();
 		input_.close();
-		new Thread()
+		new Thread() //thread because android doesn't allow network communication in main thread
 		{
 			@Override
 		    public void run()
@@ -163,7 +166,7 @@ public class Client_ChatRoom_Sockets implements Client_ChatRoom {
 	@Override
 	public void connect(){
 		// TODO Auto-generated method stubs
-		new Thread()
+		new Thread() //thread because android doesn't allow network communication in main thread
 		{
 			@Override
 		    public void run()

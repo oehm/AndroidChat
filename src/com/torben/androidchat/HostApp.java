@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
@@ -6,18 +9,19 @@ import lipermi.exception.LipeRMIException;
 import lipermi.handler.CallHandler;
 import lipermi.net.Server;
 import android.util.Log;
-
-public class Host {
-	private Host()
+//main access point for  host side operations
+// turn different server implementations on and off
+public class HostApp {
+	private HostApp()
 	{
 
 	}
 	
-	private static Host instance_ = null;
+	private static HostApp instance_ = null;
 
-	public static Host Instance(){
+	public static HostApp Instance(){ //singleton
 		if(instance_ == null){
-			instance_ = new Host();
+			instance_ = new HostApp();
 		}
 		return instance_;
 	}

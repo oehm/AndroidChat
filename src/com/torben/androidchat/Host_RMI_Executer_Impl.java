@@ -1,7 +1,11 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
 
+//remote object for client calls; forwards everything to the Host_ChatRomm instance
 public class Host_RMI_Executer_Impl implements Host_RMI_Executer {
 
 	@Override

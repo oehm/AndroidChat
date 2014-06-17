@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.BufferedReader;
@@ -28,7 +31,7 @@ public class Host_ThreadConnection_RPC implements Runnable{
 		socket_ = client;
 		input_ = new BufferedReader(new InputStreamReader(socket_.getInputStream()));
 		output_ = new BufferedWriter(new OutputStreamWriter(socket_.getOutputStream()));
-		transpot_ = new HttpJsonRpcClientTransport(socket_, input_, output_);
+		transpot_ = new HttpJsonRpcClientTransport(socket_, input_, output_); //create communication module
 		executor_ = bind();
 	}
 
@@ -37,14 +40,14 @@ public class Host_ThreadConnection_RPC implements Runnable{
 		JsonRpcExecutor executor_ = new JsonRpcExecutor();
         //Client_ChatRoom clientImpl = new Host_RPC_Executor();
         remoteObj_ = new Host_RPC_Executor();
-		executor_.addHandler("RPCExec",remoteObj_,Client_ChatRoom.class);
+		executor_.addHandler("RPCExec",remoteObj_,Client_ChatRoom.class); //bind remote object
         return executor_;
     }
 
 	@Override
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
-			executor_.execute(transpot_);
+			executor_.execute(transpot_); //try reading input and parses it to remoteobject + function + parameters
 		}
 		try {
 			Log.v("RPC", "ClientDisconnect!");

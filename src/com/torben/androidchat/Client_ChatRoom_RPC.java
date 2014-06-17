@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.BufferedReader;
@@ -75,7 +78,7 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 	@Override
 	public void disconnect() throws IOException
 	{
-		new Thread()
+		new Thread() //thread because android doesn't allow network communication in main thread
 		{
 			@Override
 		    public void run()
@@ -97,7 +100,7 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 	}
 
 	@Override
-	public void connect() 
+	public void connect() //thread because android doesn't allow network communication in main thread
 	{
 		new Thread()
 		{
@@ -123,8 +126,8 @@ public class Client_ChatRoom_RPC implements Client_ChatRoom {
 			ClientApp.Instance().finishConnectionState(false);
 			e.printStackTrace();
 		}
-		transport_ = new HttpJsonRpcClientTransport(socket_, input_, output_);
-		JsonRpcInvoker invoker = new JsonRpcInvoker();
+		transport_ = new HttpJsonRpcClientTransport(socket_, input_, output_); //transport is need for communication
+		JsonRpcInvoker invoker = new JsonRpcInvoker(); //invoker creates the proxy
 		RPCExec_ = invoker.get(transport_, "RPCExec", Client_ChatRoom.class);
 		ClientApp.Instance().finishConnectionState(true);
 	}

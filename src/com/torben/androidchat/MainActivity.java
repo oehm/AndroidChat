@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import android.app.Activity;
@@ -5,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-
+//main UIto acces configuration screens and chat itself
 public class MainActivity extends Activity {
 
 	@Override

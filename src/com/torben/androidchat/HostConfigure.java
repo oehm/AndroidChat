@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import android.app.Activity;
@@ -9,7 +12,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
+// UI configure Host ip, port, connect, disconnect
 public class HostConfigure extends Activity {
 
 	private ToggleButton toggleSockets_;
@@ -65,19 +68,19 @@ public class HostConfigure extends Activity {
 		    @Override
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        // Save the state here
-		    	Host.Instance().setSocketsState(isChecked);
+		    	HostApp.Instance().setSocketsState(isChecked);
 		    }
 		});
-		toggleSockets_.setChecked(Host.Instance().getSocketState());
+		toggleSockets_.setChecked(HostApp.Instance().getSocketState());
 		
 		textHostSockets_ = (TextView) findViewById(R.id.text_host_ip_sockets);
 		textPortSockets_ = (TextView) findViewById(R.id.text_host_port_sockets);
 		
-		if(Host.Instance().hostSockets!=null)
-			textHostSockets_.setText(Host.Instance().hostSockets);
+		if(HostApp.Instance().hostSockets!=null)
+			textHostSockets_.setText(HostApp.Instance().hostSockets);
 		
-		if(Host.Instance().portSockets!=0)
-			textPortSockets_.setText(Host.Instance().portSockets+"");
+		if(HostApp.Instance().portSockets!=0)
+			textPortSockets_.setText(HostApp.Instance().portSockets+"");
 	}
 	
 	private void setupRPC(){
@@ -86,19 +89,19 @@ public class HostConfigure extends Activity {
 		    @Override
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        // Save the state here
-		    	Host.Instance().setRPCState(isChecked);
+		    	HostApp.Instance().setRPCState(isChecked);
 		    }
 		});
-		toggleRPC_.setChecked(Host.Instance().getRPCState());
+		toggleRPC_.setChecked(HostApp.Instance().getRPCState());
 		
 		textHostRPC_ = (TextView) findViewById(R.id.text_host_ip_rpc);
 		textPortRPC_ = (TextView) findViewById(R.id.text_host_port_rpc);
 		
-		if(Host.Instance().hostRPC!=null)
-			textHostRPC_.setText(Host.Instance().hostRPC);
+		if(HostApp.Instance().hostRPC!=null)
+			textHostRPC_.setText(HostApp.Instance().hostRPC);
 		
-		if(Host.Instance().portRPC!=0)
-			textPortRPC_.setText(Host.Instance().portRPC+"");
+		if(HostApp.Instance().portRPC!=0)
+			textPortRPC_.setText(HostApp.Instance().portRPC+"");
 	}
 	
 	private void setupRMI(){
@@ -107,61 +110,61 @@ public class HostConfigure extends Activity {
 		    @Override
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        // Save the state here
-		    	Host.Instance().setRMIState(isChecked);
+		    	HostApp.Instance().setRMIState(isChecked);
 		    }
 		});
-		toggleRMI_.setChecked(Host.Instance().getRMIState());
+		toggleRMI_.setChecked(HostApp.Instance().getRMIState());
 		
 		textHostRMI_ = (TextView) findViewById(R.id.text_host_ip_rmi);
 		textPortRMI_ = (TextView) findViewById(R.id.text_host_port_rmi);
 		
-		if(Host.Instance().hostRMI!=null)
-			textHostRMI_.setText(Host.Instance().hostRMI);
+		if(HostApp.Instance().hostRMI!=null)
+			textHostRMI_.setText(HostApp.Instance().hostRMI);
 		
-		if(Host.Instance().portRMI!=0)
-			textPortRMI_.setText(Host.Instance().portRMI+"");
+		if(HostApp.Instance().portRMI!=0)
+			textPortRMI_.setText(HostApp.Instance().portRMI+"");
 	}
 	
 	/* Called when the user clicks the refresh sockets button.*/
     public void refreshSockets(View view){
-    	if(Host.Instance().hostSockets!=null)
-			textHostSockets_.setText(Host.Instance().hostSockets);
+    	if(HostApp.Instance().hostSockets!=null)
+			textHostSockets_.setText(HostApp.Instance().hostSockets);
     	else
     		textHostSockets_.setText(R.string.text_host_ip);
 		
-		if(Host.Instance().portSockets!=0)
-			textPortSockets_.setText(Host.Instance().portSockets+"");
+		if(HostApp.Instance().portSockets!=0)
+			textPortSockets_.setText(HostApp.Instance().portSockets+"");
     	else
     		textPortSockets_.setText(R.string.text_host_port);
 		
-		toggleSockets_.setChecked(Host.Instance().getSocketState());
+		toggleSockets_.setChecked(HostApp.Instance().getSocketState());
 	}
     
     public void refreshRPC(View view){
-    	if(Host.Instance().hostRPC!=null)
-			textHostRPC_.setText(Host.Instance().hostRPC);
+    	if(HostApp.Instance().hostRPC!=null)
+			textHostRPC_.setText(HostApp.Instance().hostRPC);
     	else
     		textHostRPC_.setText(R.string.text_host_ip);
 		
-		if(Host.Instance().portRPC!=0)
-			textPortRPC_.setText(Host.Instance().portRPC+"");
+		if(HostApp.Instance().portRPC!=0)
+			textPortRPC_.setText(HostApp.Instance().portRPC+"");
     	else
     		textPortRPC_.setText(R.string.text_host_port);
 		
-		toggleRPC_.setChecked(Host.Instance().getRPCState());
+		toggleRPC_.setChecked(HostApp.Instance().getRPCState());
 	}
     
     public void refreshRMI(View view){
-    	if(Host.Instance().hostRMI!=null)
-			textHostRMI_.setText(Host.Instance().hostRMI);
+    	if(HostApp.Instance().hostRMI!=null)
+			textHostRMI_.setText(HostApp.Instance().hostRMI);
     	else
     		textHostRMI_.setText(R.string.text_host_ip);
 		
-		if(Host.Instance().portRMI!=0)
-			textPortRMI_.setText(Host.Instance().portRMI+"");
+		if(HostApp.Instance().portRMI!=0)
+			textPortRMI_.setText(HostApp.Instance().portRMI+"");
     	else
     		textPortRMI_.setText(R.string.text_host_port);
 		
-		toggleRMI_.setChecked(Host.Instance().getRMIState());
+		toggleRMI_.setChecked(HostApp.Instance().getRMIState());
 	}
 }

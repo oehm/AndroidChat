@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import android.app.Activity;
@@ -18,6 +21,7 @@ import android.widget.ToggleButton;
 
 import com.torben.androidchat.ClientApp.ConnectionType;
 
+//UI to configure client
 public class ClientConfigure extends Activity {
 
 	private EditText editName_;

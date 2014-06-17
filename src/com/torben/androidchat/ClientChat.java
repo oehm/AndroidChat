@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
@@ -13,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+//activity for displaying UI
 public class ClientChat extends Activity {
 
 	EditText input_;
@@ -21,7 +25,7 @@ public class ClientChat extends Activity {
 	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) { //joins the topic
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_chat);
 		// Show the Up button in the action bar.
@@ -55,7 +59,7 @@ public class ClientChat extends Activity {
 	}
 
 	@Override
-	protected void onPause(){
+	protected void onPause(){ //leaves the topic
         super.onPause();
         
 		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
@@ -94,7 +98,7 @@ public class ClientChat extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void sendMessage(View view){
+	public void sendMessage(View view){ //try to send message written in inputfield
 		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null){
 			try {
@@ -108,7 +112,7 @@ public class ClientChat extends Activity {
 		refreshMessages(view);
     }
 
-	public void refreshMessages(View view){
+	public void refreshMessages(View view){ //load all messiges of the topic and displays them
 		String message = null;
 		Client_ChatRoom chatroom = ClientApp.Instance().getChatroom();
 		if(chatroom != null&&ClientApp.Instance().userName_!=null&&ClientApp.Instance().topic_!=null){

@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.net.InetAddress;
@@ -6,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.conn.util.InetAddressUtils;
-
+// used to get ip  of device
 public class IPHelper {
 	public static String getIPAddress(boolean useIPv4) {
         try {

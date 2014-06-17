@@ -1,3 +1,6 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.BufferedReader;
@@ -9,7 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import android.util.Log;
-
+//created for every client
 public class Host_ThreadConnection_Sockets implements Runnable{
 
 	private Socket socket_;	
@@ -22,7 +25,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 	public Host_ThreadConnection_Sockets(Socket socket){
 		socket_ = socket;
 		try {
-			socket_.setSoTimeout(2000);
+			socket_.setSoTimeout(2000); //timeout so thread can't  get locked up
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -47,7 +50,7 @@ public class Host_ThreadConnection_Sockets implements Runnable{
 			try {
 				read = input_.readLine();
 				if(read == null) break;
-				parseInput(read);
+				parseInput(read); //parse input and calls correct function
 				read = null;
 
 			} catch (IOException e) {

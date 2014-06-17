@@ -1,7 +1,10 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
-
+//interface needed for remote instance
 public interface Host_RMI_Executer {
 	public boolean addParticipant(String name, String topic) throws IOException;
 	public boolean removeParticipant(String name, String topic)throws IOException;

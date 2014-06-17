@@ -1,14 +1,18 @@
+/*
+ * Made by Tobias Hoffmann and Tobias Pretzl
+ */
 package com.torben.androidchat;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 
 import android.util.Log;
-
+// creates propper chatroom implementation depending on chosen connection type
+// main access point for client side operations
 public class ClientApp {
 	private static ClientApp instance_ = null;
 	
-	public static ClientApp Instance(){
+	public static ClientApp Instance(){ //singleton
 		if(instance_ == null){
 			instance_ = new ClientApp();
 		}
@@ -38,7 +42,7 @@ public class ClientApp {
 	}
 	
 	public void connect(){
-		if(connectionStatus_!= ConnectionStatus.disconnected) return;
+		if(connectionStatus_!= ConnectionStatus.disconnected) return; //no reconnect
 		
 		switch(connectionType_){
 		case rpc:
@@ -92,7 +96,7 @@ public class ClientApp {
 		}
 	}
 	
-	public void finishConnectionState(boolean success){
+	public void finishConnectionState(boolean success){ //used by chatroom to tell if connecting/disconnection was successful
 		Log.v("Client", "operation success: "+success);
 		
 		if(success){
